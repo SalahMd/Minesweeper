@@ -1,0 +1,93 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:untitled/core/constants/colors.dart';
+import 'package:untitled/core/constants/images.dart';
+import 'package:untitled/core/helpers/dimenesions.dart';
+import 'package:untitled/core/themes/text_styles.dart';
+import 'package:untitled/feautres/home/controller/home_page_controller.dart';
+
+class Timer extends StatelessWidget {
+  final int numOfMines;
+  final HomePageController controller;
+  const Timer({super.key, required this.numOfMines, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: Dimensions.screenWidth(context),
+      height: 100.h,
+      margin: EdgeInsets.symmetric(horizontal: 10.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 80.w,
+            height: 60.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r),
+              color: AppColors.blackColor,
+            ),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                    width: 30.sp,
+                    height: 30.sp,
+                    child: Image.asset(
+                      AppImages.mineImage,
+                      color: AppColors.redColor,
+                    )),
+                Text(
+                  controller.numOfMines.toString(),
+                  style: TextStyles.w50018Green(context),
+                ),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              controller.replay();
+            },
+            child: Container(
+                width: 60.w,
+                height: 60.h,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  color: AppColors.darkGrey,
+                ),
+                alignment: Alignment.center,
+                child: Icon(
+                  Icons.replay_outlined,
+                  size: 25.sp,
+                )),
+          ),
+          Container(
+            width: 80.w,
+            height: 60.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r),
+              color: AppColors.blackColor,
+            ),
+            alignment: Alignment.center,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  Icons.scoreboard,
+                  size: 22.sp,
+                  color: AppColors.redColor,
+                ),
+                Text(
+                  controller.seconds.toString(),
+                  style: TextStyles.w50018Green(context),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
