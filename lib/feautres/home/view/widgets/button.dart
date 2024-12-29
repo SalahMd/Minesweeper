@@ -21,7 +21,6 @@ class Button extends StatelessWidget {
       },
       onLongPress: () {
         controller.numOfMines--;
-        
       },
       child: Container(
           margin: EdgeInsets.all(2.sp),
@@ -30,6 +29,9 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               3.r,
             ),
+            border: controller.openedCells[row][col]
+                ? Border.all(color: AppColors.blueColor, width: 2)
+                : null,
             color: controller.mines[row][col] && controller.isLost
                 ? AppColors.redColor
                 : controller.openedCells[row][col]

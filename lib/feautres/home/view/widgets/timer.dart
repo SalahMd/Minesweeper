@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/core/constants/images.dart';
@@ -75,7 +76,7 @@ class Timer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Icon(
-                  Icons.scoreboard,
+                  Icons.timer,
                   size: 22.sp,
                   color: AppColors.redColor,
                 ),
@@ -88,6 +89,6 @@ class Timer extends StatelessWidget {
           )
         ],
       ),
-    );
+    ).animate().fade(duration: 700.ms, delay: 300.ms).slideY(begin: 0.3);
   }
 }

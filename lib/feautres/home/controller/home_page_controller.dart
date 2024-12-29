@@ -6,11 +6,15 @@ import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 
 class HomePageController extends GetxController {
-  int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfOpenedCells = 0;
+  int numOfMines = 10,
+      numOfRows = 9,
+      numOfColumns = 8,
+      numOfCells = 72,
+      numOfOpenedCells = 0;
   Random random = Random();
   final BuildContext context;
-  bool isLost = false;
-  int seconds = 0, t = 0;
+  bool isLost = false, isWin = false;
+  int seconds = 0;
   late Timer timer;
   List<List> mines = [], openedCells = [], cells = [];
 
@@ -20,6 +24,7 @@ class HomePageController extends GetxController {
   void onInit() {
     super.onInit();
     initBoard();
+    startTimer();
   }
 
   void initBoard() {
@@ -41,20 +46,23 @@ class HomePageController extends GetxController {
               numOfColumns,
               (index) => null,
             ));
+    seconds = 0;
 
     minesDistribution();
     update();
-    //startTimer();
   }
 
-  // startTimer() {
-  //   seconds = 0;
-  //   timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-  //     seconds++;
-  //   });
-
-  //   update();
-  // }
+  startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      if (!isLost && !isWin) {
+        if (seconds == 200) {
+          checkLose(isTimed: true);
+        }
+        seconds++;
+        update();
+      }
+    });
+  }
 
   void minesDistribution() {
     int ctn = numOfMines;
@@ -69,12 +77,12 @@ class HomePageController extends GetxController {
     }
   }
 
-  void onTapButton(int x, int y) {
-    if (checkLose(x, y)) {
+  void onTapButton(int posX, int posY) {
+    if (checkLose(x: posX, y: posY)) {
       return;
     }
-    if (!openedCells[x][y]) {
-      floodFill(x, y);
+    if (!openedCells[posX][posY]&&!isLost&&!isWin) {
+      openCells(posX, posY);
     }
     update();
   }
@@ -96,14 +104,14 @@ class HomePageController extends GetxController {
     return ctn;
   }
 
-  void floodFill(int x, int y) {
+  void openCells(int x, int y) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
         if (valid(i, j) && !openedCells[i][j] && !mines[i][j]) {
           openedCells[i][j] = true;
           int count = countMines(i, j);
           if (count == 0) {
-            floodFill(i, j);
+            openCells(i, j);
           } else if (count != 0) {
             cells[i][j] = count;
           }
@@ -114,8 +122,8 @@ class HomePageController extends GetxController {
     checkWin();
   }
 
-  bool checkLose(int x, int y) {
-    if (mines[x][y]) {
+  bool checkLose({int x = 0, int y = 0, bool isTimed = false}) {
+    if (mines[x][y] || isTimed) {
       isLost = true;
       animationedAlertWithActions(AppAnimations.lose, 'You lost', () {
         replay();
@@ -129,6 +137,7 @@ class HomePageController extends GetxController {
   bool checkWin() {
     print(numOfOpenedCells);
     if (numOfOpenedCells == (numOfRows * numOfColumns) - numOfMines) {
+      isWin = true;
       animationedAlertWithActions(AppAnimations.win, 'You won', () {
         replay();
       }, context);
@@ -138,10 +147,11 @@ class HomePageController extends GetxController {
     return false;
   }
 
-  replay() {
+  void replay() {
+    isWin = false;
     isLost = false;
     numOfOpenedCells = 0;
-    Get.back();
     initBoard();
+    Get.back();
   }
 }

@@ -17,13 +17,15 @@ class HomePage extends StatelessWidget {
         child: GetBuilder<HomePageController>(
           builder: (controller) => Column(
             children: [
-              TopBar(),
+              const TopBar(
+                title: "Minesweeper",
+              ),
               Timer(
                 numOfMines: controller.numOfMines,
                 controller: controller,
               ),
               Grid(
-                numOfButtons: 72,
+                numOfCells: controller.numOfCells,
                 controller: controller,
                 numOfColumns: controller.numOfColumns,
               )
