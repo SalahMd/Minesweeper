@@ -8,9 +8,13 @@ import 'package:untitled/core/themes/text_styles.dart';
 import 'package:untitled/feautres/home/controller/home_page_controller.dart';
 
 class Timer extends StatelessWidget {
-  final int numOfMines;
+  final int numOfMines, numOfBoard;
   final HomePageController controller;
-  const Timer({super.key, required this.numOfMines, required this.controller});
+  const Timer(
+      {super.key,
+      required this.numOfMines,
+      required this.controller,
+      required this.numOfBoard});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,7 @@ class Timer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              controller.replay();
+              controller.replay(numOfBoard);
             },
             child: Container(
                 width: 60.w,
@@ -81,7 +85,7 @@ class Timer extends StatelessWidget {
                   color: AppColors.redColor,
                 ),
                 Text(
-                  controller.seconds.toString(),
+                  controller.seconds[numOfBoard].toString(),
                   style: TextStyles.w50018Green(context),
                 ),
               ],

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/feautres/home/controller/home_page_controller.dart';
-import 'package:untitled/feautres/home/view/widgets/grid.dart';
-import 'package:untitled/feautres/home/view/widgets/movements.dart';
-import 'package:untitled/feautres/home/view/widgets/timer.dart';
+import 'package:untitled/feautres/home/view/widgets/board.dart';
 import 'package:untitled/feautres/home/view/widgets/top_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,36 +13,24 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey,
       body: SingleChildScrollView(
-        child: GetBuilder<HomePageController>(
-          builder: (controller) => Column(
-            children: [
-              const TopBar(
-                title: "Minesweeper",
-              ),
-              Timer(
-                numOfMines: controller.numOfMines,
-                controller: controller,
-              ),
-              Grid(
-                numOfCells: controller.numOfCells,
-                controller: controller,
-                numOfColumns: controller.numOfColumns,
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              Movements(
-                onBackMove: () {
-                  controller.backMove(
-                      controller.posXLstMove, controller.posYLastMove);
-                },
-                onForwardMove: () {
-                  controller.forwardMove(
-                      controller.posXLstMove, controller.posYLastMove);
-                },
-              )
-            ],
-          ),
+        child: Column(
+          children: [
+            const TopBar(
+              title: "Minesweeper",
+            ),
+            GetBuilder<HomePageController>(
+                builder: (controller) => ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: controller.numOfBoards,
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, i) {
+                      return Board(
+                        controller: controller,
+                        boardNum: i ,
+                      );
+                    })),
+          ],
         ),
       ),
     );

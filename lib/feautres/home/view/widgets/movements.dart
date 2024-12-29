@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/core/helpers/dimenesions.dart';
@@ -6,7 +7,8 @@ import 'package:untitled/core/helpers/dimenesions.dart';
 class Movements extends StatelessWidget {
   final void Function() onBackMove;
   final void Function() onForwardMove;
-  const Movements({super.key, required this.onBackMove, required this.onForwardMove});
+  const Movements(
+      {super.key, required this.onBackMove, required this.onForwardMove});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class Movements extends StatelessWidget {
             onTap: onBackMove,
             child: Container(
               width: 70.w,
-              height: 40.h,
+              height: 45.h,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.r),
@@ -37,7 +39,7 @@ class Movements extends StatelessWidget {
             onTap: onForwardMove,
             child: Container(
               width: 70.w,
-              height: 40.h,
+              height: 45.h,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.r),
@@ -52,6 +54,6 @@ class Movements extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).animate().fade(duration: 700.ms, delay: 700.ms).slideY(begin: 0.7);
   }
 }

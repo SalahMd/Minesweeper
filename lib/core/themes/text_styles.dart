@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:untitled/core/constants/colors.dart';
 
 class TextStyles {
   static TextStyle bold15(BuildContext context) =>
@@ -14,6 +15,10 @@ class TextStyles {
       color: Colors.red[700], fontSize: 18.sp, fontWeight: FontWeight.w500);
   static TextStyle w40014(BuildContext context) =>
       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500);
+  static TextStyle w40014Wgite(BuildContext context) => TextStyle(
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w500,
+      color: AppColors.whiteColor);
   static TextStyle w40014Blue(BuildContext context) => TextStyle(
       fontSize: 14.sp, fontWeight: FontWeight.w500, color: Colors.blue[800]);
 }

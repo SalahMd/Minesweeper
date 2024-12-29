@@ -7,17 +7,19 @@ import 'package:untitled/feautres/home/controller/home_page_controller.dart';
 class Button extends StatelessWidget {
   final HomePageController controller;
   final int row, col;
+  final int boardNum;
   const Button(
       {super.key,
       required this.controller,
       required this.row,
-      required this.col});
+      required this.col,
+      required this.boardNum});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        controller.onTapButton(row, col);
+        controller.onTapButton(row, col, boardNum);
       },
       onLongPress: () {
         controller.numOfMines--;
@@ -29,20 +31,21 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               3.r,
             ),
-            border: controller.openedCells[row][col]
+            border: controller.openedCells[boardNum][row][col]
                 ? Border.all(color: AppColors.blueColor, width: 2)
                 : null,
-            color: controller.mines[row][col] && controller.isLost
+            color: controller.mines[boardNum][row][col]
+                //&& controller.isLost
                 ? AppColors.redColor
-                : controller.openedCells[row][col]
+                : controller.openedCells[boardNum][row][col]
                     ? AppColors.greenColor
                     : AppColors.greyColor,
           ),
-          child: controller.mines[row][col] && controller.isLost
+          child: controller.mines[boardNum][row][col] && controller.isLost[boardNum]
               ? Image.asset(AppImages.mineImage)
-              : Text(controller.cells[row][col] == null
+              : Text(controller.cells[boardNum][row][col] == null
                   ? ''
-                  : controller.cells[row][col].toString())),
+                  : controller.cells[boardNum][row][col].toString())),
     );
   }
 }
