@@ -13,11 +13,11 @@ class HomePageController extends GetxController {
       numOfOpenedCells = 0;
   Random random = Random();
   final BuildContext context;
-  bool isLost = false, isWin = false;
+  bool isLost = false, isWin = false, isBackMove = false;
   int seconds = 0;
   late Timer timer;
   List<List> mines = [], openedCells = [], cells = [];
-
+  int posXLstMove = 0, posYLastMove = 0;
   HomePageController({required this.context});
 
   @override
@@ -55,7 +55,7 @@ class HomePageController extends GetxController {
   startTimer() {
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       if (!isLost && !isWin) {
-        if (seconds == 200) {
+        if (seconds == 2000) {
           checkLose(isTimed: true);
         }
         seconds++;
@@ -69,7 +69,6 @@ class HomePageController extends GetxController {
     while (ctn > 0) {
       int x = random.nextInt(numOfRows - 1);
       int j = random.nextInt(numOfColumns - 1);
-      print(x.toString() + "," + j.toString());
       if (!mines[x][j]) {
         mines[x][j] = true;
         ctn--;
@@ -81,7 +80,9 @@ class HomePageController extends GetxController {
     if (checkLose(x: posX, y: posY)) {
       return;
     }
-    if (!openedCells[posX][posY]&&!isLost&&!isWin) {
+    if (!openedCells[posX][posY] && !isLost && !isWin) {
+      posXLstMove = posX;
+      posYLastMove = posY;
       openCells(posX, posY);
     }
     update();
@@ -100,11 +101,12 @@ class HomePageController extends GetxController {
         }
       }
     }
-    print(ctn);
     return ctn;
   }
 
   void openCells(int x, int y) {
+    print(posXLstMove.toString() + "," + posYLastMove.toString());
+    isBackMove = false;
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
         if (valid(i, j) && !openedCells[i][j] && !mines[i][j]) {
@@ -122,6 +124,28 @@ class HomePageController extends GetxController {
     checkWin();
   }
 
+  void closeCells(int x, int y) {
+    isBackMove = true;
+
+    for (int i = x - 1; i <= x + 1; i++) {
+      for (int j = y - 1; j <= y + 1; j++) {
+        if (valid(i, j) && openedCells[i][j]) {
+          openedCells[i][j] = false;
+          print(i.toString() + j.toString() + openedCells[i][j].toString());
+          int count = countMines(i, j);
+          if (count == 0) {
+            closeCells(i, j);
+          } else if (count != 0) {
+            cells[i][j] = null;
+          }
+          numOfOpenedCells--;
+        }
+      }
+    }
+
+    update();
+  }
+
   bool checkLose({int x = 0, int y = 0, bool isTimed = false}) {
     if (mines[x][y] || isTimed) {
       isLost = true;
@@ -135,7 +159,6 @@ class HomePageController extends GetxController {
   }
 
   bool checkWin() {
-    print(numOfOpenedCells);
     if (numOfOpenedCells == (numOfRows * numOfColumns) - numOfMines) {
       isWin = true;
       animationedAlertWithActions(AppAnimations.win, 'You won', () {
@@ -153,5 +176,17 @@ class HomePageController extends GetxController {
     numOfOpenedCells = 0;
     initBoard();
     Get.back();
+  }
+
+  void backMove(int x, int y) {
+    if (!isBackMove) {
+      closeCells(x, y);
+    }
+  }
+
+  void forwardMove(int x, int y) {
+    if (isBackMove) {
+      openCells(x, y);
+    }
   }
 }

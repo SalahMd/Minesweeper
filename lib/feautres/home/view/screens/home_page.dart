@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/feautres/home/controller/home_page_controller.dart';
 import 'package:untitled/feautres/home/view/widgets/grid.dart';
+import 'package:untitled/feautres/home/view/widgets/movements.dart';
 import 'package:untitled/feautres/home/view/widgets/timer.dart';
 import 'package:untitled/feautres/home/view/widgets/top_bar.dart';
 
@@ -28,6 +30,19 @@ class HomePage extends StatelessWidget {
                 numOfCells: controller.numOfCells,
                 controller: controller,
                 numOfColumns: controller.numOfColumns,
+              ),
+              SizedBox(
+                height: 30.h,
+              ),
+              Movements(
+                onBackMove: () {
+                  controller.backMove(
+                      controller.posXLstMove, controller.posYLastMove);
+                },
+                onForwardMove: () {
+                  controller.forwardMove(
+                      controller.posXLstMove, controller.posYLastMove);
+                },
               )
             ],
           ),
