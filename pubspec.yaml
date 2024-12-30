@@ -13,8 +13,7 @@ dependencies:
   flutter_animate: ^4.2.0
   get: ^4.6.6
   flutter_sound: ^9.17.8
-
-
+  shared_preferences: ^2.3.3
 
 
 dev_dependencies:

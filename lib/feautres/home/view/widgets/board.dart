@@ -17,7 +17,8 @@ class Board extends StatelessWidget {
       children: [
         Timer(
           numOfMines: controller.numOfMines,
-          controller: controller, numOfBoard: boardNum,
+          controller: controller,
+          numOfBoard: boardNum,
         ),
         Grid(
           numOfCells: controller.numOfCells,
@@ -30,18 +31,16 @@ class Board extends StatelessWidget {
         ),
         Movements(
           onBackMove: () {
-            controller.backMove(
-                controller.posXLstMove[boardNum], controller.posYLastMove[boardNum],boardNum);
+            controller.backMove(boardNum);
           },
           onForwardMove: () {
-            controller.forwardMove(
-                controller.posXLstMove[boardNum], controller.posYLastMove[boardNum],boardNum);
+            controller.forwardMove(boardNum);
           },
         ),
         SizedBox(height: 20.h),
         NewBoard(
           onNewBoard: () {
-            controller.addBoard(controller.numOfBoards-1);
+            controller.addBoard(controller.numOfBoards - 1);
           },
         )
       ],

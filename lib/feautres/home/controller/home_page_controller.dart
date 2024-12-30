@@ -14,10 +14,13 @@ class HomePageController extends GetxController {
   Random random = Random();
   final BuildContext context;
   List<bool> isLost = [false], isWin = [false], isBackMove = [false];
-  List<int> seconds = [], numOfOpenedCells = [];
-  List<Timer> timer = [];
+  List<int> seconds = [0], numOfOpenedCells = [0];
+  late Timer timer;
   List<List<List>> mines = [], openedCells = [], cells = [];
-  List<int> posXLstMove = [0], posYLastMove = [0];
+  List<List> xBackMoves = [],
+      yBackMoves = [],
+      xForwardMoves = [],
+      yForwardMoves = [];
   HomePageController({required this.context});
 
   @override
@@ -26,31 +29,35 @@ class HomePageController extends GetxController {
     initBoard(0, false);
   }
 
-  void initBoard(int numOfBoard, bool replay) {
-    seconds.add(numOfBoard);
-    posXLstMove.add(0);
-    posYLastMove.add(0);
+  void initBoard(int boardId, bool replay) {
+    seconds.add(0);
+    seconds[boardId] = 0;
+    xBackMoves.add([]);
+    yBackMoves.add([]);
+    xForwardMoves.add([]);
+    yForwardMoves.add([]);
     numOfOpenedCells.add(1);
     if (replay) {
-      mines[numOfBoard] = List<List>.generate(
+      mines[boardId] = List<List>.generate(
           numOfRows,
           (i) => List<dynamic>.generate(
                 numOfColumns,
                 (index) => false,
               ));
-      openedCells[numOfBoard] = List<List>.generate(
+      openedCells[boardId] = List<List>.generate(
           numOfRows,
           (i) => List<dynamic>.generate(
                 numOfColumns,
                 (index) => false,
               ));
-      cells[numOfBoard] = List<List>.generate(
+      cells[boardId] = List<List>.generate(
           numOfRows,
           (i) => List<dynamic>.generate(
                 numOfColumns,
                 (index) => null,
               ));
       replay = false;
+      seconds[boardId] = 1;
     }
     mines.add(List<List>.generate(
         numOfRows,
@@ -70,54 +77,54 @@ class HomePageController extends GetxController {
               numOfColumns,
               (index) => null,
             )));
-    //timer.add(Timer(duration, callback));
-    print(mines.length);
     isLost.add(false);
     isWin.add(false);
     isBackMove.add(false);
-    minesDistribution(numOfBoard);
-    // startTimer(numOfBoard);
-
+    minesDistribution(boardId);
+    startTimer(boardId);
     update();
   }
 
-  startTimer(int boardNum) {
-    if (seconds[boardNum] == 0) {
-      timer[boardNum] = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-        if (!isLost[boardNum] && !isWin[boardNum]) {
-          if (seconds[boardNum] == 2000) {
-            checkLose(boardNum, isTimed: true);
+  startTimer(int boardId) {
+    if (seconds[boardId] == 0) {
+      timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+        if (!isLost[boardId] && !isWin[boardId]) {
+          if (seconds[boardId] == 2000) {
+            checkLose(boardId, isTimed: true);
           }
-          seconds[boardNum]++;
+          seconds[boardId]++;
           update();
         }
       });
     }
   }
 
-  void minesDistribution(int numOfBoard) {
+  void minesDistribution(int boardId) {
     int ctn = numOfMines;
     while (ctn > 0) {
       int x = random.nextInt(numOfRows - 1);
       int j = random.nextInt(numOfColumns - 1);
-      if (!mines[numOfBoard][x][j]) {
-        mines[numOfBoard][x][j] = true;
+      if (!mines[boardId][x][j]) {
+        mines[boardId][x][j] = true;
         ctn--;
       }
     }
   }
 
-  void onTapButton(int posX, int posY, int numOfBoard) {
-    if (checkLose(numOfBoard, x: posX, y: posY)) {
+  void onTapButton(int posX, int posY, int boardId) {
+    if (checkLose(boardId, x: posX, y: posY)) {
       return;
     }
-    if (!openedCells[numOfBoard][posX][posY] &&
-        !isLost[numOfBoard] &&
-        !isWin[numOfBoard]) {
-      posXLstMove[numOfBoard] = posX;
-      posYLastMove[numOfBoard] = posY;
-      openCells(posX, posY, numOfBoard);
+    if (!openedCells[boardId][posX][posY] &&
+        !isLost[boardId] &&
+        !isWin[boardId]) {
+      openCells(posX, posY, boardId);
+      xBackMoves[boardId].add(posX);
+      yBackMoves[boardId].add(posY);
+      xForwardMoves[boardId].add(posX);
+      yForwardMoves[boardId].add(posY);
     }
+
     update();
   }
 
@@ -125,11 +132,11 @@ class HomePageController extends GetxController {
     return i >= 0 && j >= 0 && i < numOfRows && j < numOfColumns;
   }
 
-  int countMines(int x, int y, int numOfBoard) {
+  int countMines(int x, int y, int boardId) {
     int ctn = 0;
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (valid(i, j) && mines[numOfBoard][i][j]) {
+        if (valid(i, j) && mines[boardId][i][j]) {
           ctn++;
         }
       }
@@ -137,53 +144,49 @@ class HomePageController extends GetxController {
     return ctn;
   }
 
-  void openCells(int x, int y, int boardNum) {
+  void openCells(int x, int y, int boardId) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
         if (valid(i, j) &&
-            !openedCells[boardNum][i][j] &&
-            !mines[boardNum][i][j]) {
-          openedCells[boardNum][i][j] = true;
-          int count = countMines(i, j, boardNum);
+            !openedCells[boardId][i][j] &&
+            !mines[boardId][i][j]) {
+          openedCells[boardId][i][j] = true;
+          int count = countMines(i, j, boardId);
           if (count == 0) {
-            openCells(i, j, boardNum);
+            openCells(i, j, boardId);
           } else if (count != 0) {
-            cells[boardNum][i][j] = count;
+            cells[boardId][i][j] = count;
           }
-          numOfOpenedCells[boardNum]++;
+          numOfOpenedCells[boardId]++;
         }
       }
     }
-    checkWin(boardNum);
+    checkWin(boardId);
   }
 
-  void closeCells(int x, int y, int numOfBoard) {
+  void closeCells(int x, int y, int boadId) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (valid(i, j) && openedCells[numOfBoard][i][j]) {
-          openedCells[numOfBoard][i][j] = false;
-          print(i.toString() +
-              j.toString() +
-              openedCells[numOfBoard][i][j].toString());
-          int count = countMines(i, j, numOfBoard);
+        if (valid(i, j) && openedCells[boadId][i][j]) {
+          openedCells[boadId][i][j] = false;
+          int count = countMines(i, j, boadId);
           if (count == 0) {
-            closeCells(i, j, numOfBoard);
+            closeCells(i, j, boadId);
           } else if (count != 0) {
-            cells[numOfBoard][i][j] = null;
+            cells[boadId][i][j] = null;
           }
-          numOfOpenedCells[numOfBoard]--;
+          numOfOpenedCells[boadId]--;
         }
       }
     }
-
     update();
   }
 
-  bool checkLose(int numOfBoard, {int x = 0, int y = 0, bool isTimed = false}) {
-    if (mines[numOfBoard][x][y] || isTimed) {
-      isLost[numOfBoard] = true;
+  bool checkLose(int boardId, {int x = 0, int y = 0, bool isTimed = false}) {
+    if (mines[boardId][x][y] || isTimed) {
+      isLost[boardId] = true;
       animationedAlertWithActions(AppAnimations.lose, 'You lost', () {
-        replay(numOfBoard);
+        replay(boardId);
       }, context);
       update();
       return true;
@@ -191,11 +194,12 @@ class HomePageController extends GetxController {
     return false;
   }
 
-  bool checkWin(int numOfBoard) {
-    if (numOfOpenedCells[numOfBoard] == (numOfRows * numOfColumns) - numOfMines) {
-      isWin[numOfBoard] = true;
+  bool checkWin(int boardId) {
+    if (numOfOpenedCells[boardId] ==
+        (numOfRows * numOfColumns) - numOfMines) {
+      isWin[boardId] = true;
       animationedAlertWithActions(AppAnimations.win, 'You won', () {
-        replay(numOfBoard);
+        replay(boardId);
       }, context);
       update();
       return true;
@@ -203,30 +207,42 @@ class HomePageController extends GetxController {
     return false;
   }
 
-  void replay(int numOfBoard) {
-    print(numOfBoard.toString() + "qqqqqq");
-    isWin[numOfBoard] = false;
-    isLost[numOfBoard] = false;
-    numOfOpenedCells[numOfBoard] = 0;
-    initBoard(numOfBoard, true);
+  void replay(int boardId) {
+    isWin[boardId] = false;
+    isLost[boardId] = false;
+    numOfOpenedCells[boardId] = 0;
+    initBoard(boardId, true);
     Get.back();
   }
 
-  void backMove(int x, int y, int numOfBoard) {
-    if (!isLost[numOfBoard] && numOfOpenedCells[numOfBoard] > 0) {
-      closeCells(x, y, numOfBoard);
+  void backMove(int boardId) {
+    print(numOfOpenedCells[boardId]);
+    if (!isLost[boardId] &&
+        numOfOpenedCells[boardId] > 0 &&
+        yBackMoves[boardId].isNotEmpty) {
+      closeCells(
+          xBackMoves[boardId].last, yBackMoves[boardId].last, boardId);
+      xForwardMoves[boardId].add(xBackMoves[boardId].last);
+      yForwardMoves[boardId].add(yBackMoves[boardId].last);
+      xBackMoves[boardId].removeLast();
+      yBackMoves[boardId].removeLast();
     }
   }
 
-  void forwardMove(int x, int y, int numOfBoard) {
-    if (isBackMove[numOfBoard]) {
-      openCells(x, y, numOfBoard);
+  void forwardMove(int boardId) {
+    if (yForwardMoves[boardId].isNotEmpty) {
+      openCells(xForwardMoves[boardId].last, yForwardMoves[boardId].last,
+          boardId);
+      xBackMoves[boardId].add(xForwardMoves[boardId].last);
+      yBackMoves[boardId].add(yForwardMoves[boardId].last);
+      xForwardMoves[boardId].removeLast();
+      yForwardMoves[boardId].removeLast();
     }
   }
 
-  void addBoard(int numOfBoard) {
+  void addBoard(int boardId) {
     numOfBoards++;
-    initBoard(numOfBoard + 1, false);
+    initBoard(boardId + 1, false);
     update();
   }
 }

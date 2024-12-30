@@ -34,14 +34,15 @@ class Button extends StatelessWidget {
             border: controller.openedCells[boardNum][row][col]
                 ? Border.all(color: AppColors.blueColor, width: 2)
                 : null,
-            color: controller.mines[boardNum][row][col]
-                //&& controller.isLost
+            color: controller.mines[boardNum][row][col] &&
+                    controller.isLost[boardNum]
                 ? AppColors.redColor
                 : controller.openedCells[boardNum][row][col]
                     ? AppColors.greenColor
                     : AppColors.greyColor,
           ),
-          child: controller.mines[boardNum][row][col] && controller.isLost[boardNum]
+          child: controller.mines[boardNum][row][col] &&
+                  controller.isLost[boardNum]
               ? Image.asset(AppImages.mineImage)
               : Text(controller.cells[boardNum][row][col] == null
                   ? ''
