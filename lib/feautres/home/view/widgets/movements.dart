@@ -9,7 +9,10 @@ class Movements extends StatelessWidget {
   final void Function() onForwardMove;
   final void Function() onSaveBoard;
   const Movements(
-      {super.key, required this.onBackMove, required this.onForwardMove, required this.onSaveBoard});
+      {super.key,
+      required this.onBackMove,
+      required this.onForwardMove,
+      required this.onSaveBoard});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class Movements extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap:onSaveBoard,
+            onTap: onSaveBoard,
             child: Container(
               width: 50.w,
               height: 50.h,

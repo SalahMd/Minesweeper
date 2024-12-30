@@ -22,7 +22,7 @@ class Button extends StatelessWidget {
         controller.onTapButton(row, col, boardNum);
       },
       onLongPress: () {
-        controller.numOfMines--;
+        controller.setFlag(boardNum, row, col);
       },
       child: Container(
           margin: EdgeInsets.all(2.sp),
@@ -44,9 +44,12 @@ class Button extends StatelessWidget {
           child: controller.mines[boardNum][row][col] &&
                   controller.isLost[boardNum]
               ? Image.asset(AppImages.mineImage)
-              : Text(controller.cells[boardNum][row][col] == null
-                  ? ''
-                  : controller.cells[boardNum][row][col].toString())),
+              : controller.cells[boardNum][row][col] == "f"
+                  ? Image.asset(AppImages.flag)
+                  : Text(controller.cells[boardNum][row][col] != "f" &&
+                          controller.cells[boardNum][row][col] != null
+                      ? controller.cells[boardNum][row][col].toString()
+                      : '')),
     );
   }
 }

@@ -14,7 +14,7 @@ class HomePageController extends GetxController {
       numOfBoards = 1;
   Random random = Random();
   final BuildContext context;
-  List<bool> isLost = [false], isWin = [false], isBackMove = [false];
+  List<bool> isLost = [false], isWin = [false];
   List<int> seconds = [0], numOfOpenedCells = [0];
   late Timer timer;
   List<List<List>> mines = [], openedCells = [], cells = [];
@@ -81,7 +81,6 @@ class HomePageController extends GetxController {
             )));
     isLost.add(false);
     isWin.add(false);
-    isBackMove.add(false);
     minesDistribution(boardId);
     startTimer(boardId);
     update();
@@ -189,7 +188,9 @@ class HomePageController extends GetxController {
       isLost[boardId] = true;
       animationedAlertWithActions(AppAnimations.lose, 'You lost', () {
         replay(boardId);
+        Get.back();
       }, context);
+
       update();
       return true;
     }
@@ -213,7 +214,6 @@ class HomePageController extends GetxController {
     isLost[boardId] = false;
     numOfOpenedCells[boardId] = 0;
     initBoard(boardId, true);
-    Get.back();
   }
 
   void backMove(int boardId) {
@@ -250,5 +250,19 @@ class HomePageController extends GetxController {
     animationedAlertWithActions(AppAnimations.win, "Board is saved", () {
       Get.back();
     }, context);
+  }
+
+  setFlag(int boardId, int posX, int posY) {
+    if (!openedCells[boardId][posX][posY] &&
+        !isLost[boardId] &&
+        !isWin[boardId] &&
+        cells[boardId][posX][posY] != 'f') {
+      cells[boardId][posX][posY] = "f";
+      xBackMoves[boardId].add(posX);
+      yBackMoves[boardId].add(posY);
+      xForwardMoves[boardId].add(posX);
+      yForwardMoves[boardId].add(posY);
+    }
+    update();
   }
 }

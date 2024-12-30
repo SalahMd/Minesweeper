@@ -12,7 +12,7 @@ class TextStyles {
   static TextStyle bold17(BuildContext context) => TextStyle(
       fontSize: 17.sp, fontWeight: FontWeight.bold, color: Colors.grey[400]);
   static TextStyle bold22(BuildContext context) => TextStyle(
-      fontSize: 22.sp, fontWeight: FontWeight.bold, color: Colors.black);
+      fontSize: 22.sp, fontWeight: FontWeight.bold, color: Colors.white);
   static TextStyle w50018Green(BuildContext context) => TextStyle(
       color: Colors.red[700], fontSize: 18.sp, fontWeight: FontWeight.w500);
   static TextStyle w40014(BuildContext context) =>
