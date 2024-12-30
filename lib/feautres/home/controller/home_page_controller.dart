@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class HomePageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    //sharedPref.sharedPreferences.clear();
     initBoard(0, false);
   }
 
@@ -129,7 +131,7 @@ class HomePageController extends GetxController {
     update();
   }
 
-  bool valid(int i, int j) {
+  bool validCell(int i, int j) {
     return i >= 0 && j >= 0 && i < numOfRows && j < numOfColumns;
   }
 
@@ -137,7 +139,7 @@ class HomePageController extends GetxController {
     int ctn = 0;
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (valid(i, j) && mines[boardId][i][j]) {
+        if (validCell(i, j) && mines[boardId][i][j]) {
           ctn++;
         }
       }
@@ -148,7 +150,7 @@ class HomePageController extends GetxController {
   void openCells(int x, int y, int boardId) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (valid(i, j) &&
+        if (validCell(i, j) &&
             !openedCells[boardId][i][j] &&
             !mines[boardId][i][j]) {
           openedCells[boardId][i][j] = true;
@@ -168,7 +170,7 @@ class HomePageController extends GetxController {
   void closeCells(int x, int y, int boadId) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (valid(i, j) && openedCells[boadId][i][j]) {
+        if (validCell(i, j) && openedCells[boadId][i][j]) {
           openedCells[boadId][i][j] = false;
           int count = countMines(i, j, boadId);
           if (count == 0) {
@@ -202,6 +204,7 @@ class HomePageController extends GetxController {
       isWin[boardId] = true;
       animationedAlertWithActions(AppAnimations.win, 'You won', () {
         replay(boardId);
+        Get.back();
       }, context);
       update();
       return true;
@@ -216,7 +219,9 @@ class HomePageController extends GetxController {
     initBoard(boardId, true);
   }
 
-  void backMove(int boardId) {
+  void backMove(
+    int boardId,
+  ) {
     if (!isLost[boardId] &&
         numOfOpenedCells[boardId] > 0 &&
         yBackMoves[boardId].isNotEmpty) {
@@ -245,8 +250,27 @@ class HomePageController extends GetxController {
     update();
   }
 
-  void saveBoard(int boardId) async {
-    //await sharedPref.sharedPreferences.setStringList('', []);
+  saveBoard(int boardId) async {
+    int ctn;
+    if (sharedPref.sharedPreferences.getInt('numOfSavedBoards') == null) {
+      ctn = 0;
+      sharedPref.sharedPreferences.setInt('numOfSavedBoards', ctn);
+    }
+    ctn = sharedPref.sharedPreferences.getInt('numOfSavedBoards')! + 1;
+
+    await sharedPref.sharedPreferences.setInt('numOfSavedBoards', ctn);
+    print(cells[boardId]);
+    await sharedPref.sharedPreferences.setInt('id${ctn.toString()}', ctn);
+    await sharedPref.sharedPreferences
+        .setInt('numOfOpenedCells${ctn.toString()}', numOfOpenedCells[boardId]);
+    await sharedPref.sharedPreferences
+        .setString('cells${ctn.toString()}', json.encode(cells[boardId]));
+    await sharedPref.sharedPreferences
+        .setString('mines${ctn.toString()}', json.encode(mines[boardId]));
+    await sharedPref.sharedPreferences.setString(
+        'openedCells${ctn.toString()}', json.encode(openedCells[boardId]));
+    await sharedPref.sharedPreferences
+        .setString('date${ctn.toString()}', DateTime.now().toString());
     animationedAlertWithActions(AppAnimations.win, "Board is saved", () {
       Get.back();
     }, context);
@@ -258,10 +282,10 @@ class HomePageController extends GetxController {
         !isWin[boardId] &&
         cells[boardId][posX][posY] != 'f') {
       cells[boardId][posX][posY] = "f";
-      xBackMoves[boardId].add(posX);
-      yBackMoves[boardId].add(posY);
-      xForwardMoves[boardId].add(posX);
-      yForwardMoves[boardId].add(posY);
+      xBackMoves[boardId].add('f');
+      yBackMoves[boardId].add('f');
+      xForwardMoves[boardId].add('f');
+      yForwardMoves[boardId].add('f');
     }
     update();
   }

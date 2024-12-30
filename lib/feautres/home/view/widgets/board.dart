@@ -31,13 +31,14 @@ class Board extends StatelessWidget {
         ),
         Movements(
           onBackMove: () {
+          
             controller.backMove(boardNum);
           },
           onForwardMove: () {
             controller.forwardMove(boardNum);
           },
-          onSaveBoard: () {
-            controller.saveBoard(boardNum);
+          onSaveBoard: () async{
+           await controller.saveBoard(boardNum);
           },
         ),
         SizedBox(height: 10.h),

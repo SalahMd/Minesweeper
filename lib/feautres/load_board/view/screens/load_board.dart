@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/feautres/home/view/widgets/top_bar.dart';
+import 'package:untitled/feautres/load_board/controller/load_board_controller.dart';
 import 'package:untitled/feautres/load_board/view/widgets/load_board_widget.dart';
 
 class LoadBoard extends StatelessWidget {
@@ -9,6 +11,7 @@ class LoadBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(LoadBoardController());
     return Scaffold(
       backgroundColor: AppColors.greyColor,
       body: SingleChildScrollView(
@@ -18,20 +21,24 @@ class LoadBoard extends StatelessWidget {
             SizedBox(
               height: 20.h,
             ),
-            ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return LoadBoardWidget(
-                    boardName: 'Saved board',
-                    date: '2023/12/11',
-                    onLoad: () {},
-                    onRemove: () {},
-                    id: index,
-                  );
-                })
+            GetBuilder<LoadBoardController>(
+              builder: (controller) => ListView.builder(
+                  padding: EdgeInsets.zero,
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: controller.numOfSavedBoards,
+                  itemBuilder: (context, index) {
+                    return LoadBoardWidget(
+                      boardName: 'Saved board',
+                      date: controller.loadedBoardModels[index].date!,
+                      onLoad: () {
+                     //   controller.loadBoard(index);
+                      },
+                      onRemove: () {},
+                      id: controller.loadedBoardModels[index].id!,
+                    );
+                  }),
+            )
           ],
         ),
       ),

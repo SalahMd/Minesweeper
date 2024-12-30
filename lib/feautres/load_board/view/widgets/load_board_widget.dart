@@ -23,7 +23,9 @@ class LoadBoardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        
+      },
       child: Container(
         color: AppColors.whiteColor,
         margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -43,7 +45,7 @@ class LoadBoardWidget extends StatelessWidget {
                   height: 5.h,
                 ),
                 Text(Jiffy.parse(date)
-                    .format(pattern: 'y/MMM/EE   djm')
+                    .format(pattern: 'y/MMM/EE   h:m')
                     .toString())
               ],
             ),
