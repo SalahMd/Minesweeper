@@ -36,8 +36,11 @@ class Board extends StatelessWidget {
           onForwardMove: () {
             controller.forwardMove(boardNum);
           },
+          onSaveBoard: () {
+            controller.saveBoard(boardNum);
+          },
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
         NewBoard(
           onNewBoard: () {
             controller.addBoard(controller.numOfBoards - 1);

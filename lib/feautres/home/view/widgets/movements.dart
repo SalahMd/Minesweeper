@@ -7,8 +7,9 @@ import 'package:untitled/core/helpers/dimenesions.dart';
 class Movements extends StatelessWidget {
   final void Function() onBackMove;
   final void Function() onForwardMove;
+  final void Function() onSaveBoard;
   const Movements(
-      {super.key, required this.onBackMove, required this.onForwardMove});
+      {super.key, required this.onBackMove, required this.onForwardMove, required this.onSaveBoard});
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,23 @@ class Movements extends StatelessWidget {
                   border: Border.all(color: AppColors.blueColor)),
               child: Icon(
                 Icons.arrow_back,
+                size: 30.sp,
+                color: AppColors.greyColor,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap:onSaveBoard,
+            child: Container(
+              width: 50.w,
+              height: 50.h,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.r),
+                  color: AppColors.darkGrey,
+                  border: Border.all(color: AppColors.blueColor)),
+              child: Icon(
+                Icons.save,
                 size: 30.sp,
                 color: AppColors.greyColor,
               ),

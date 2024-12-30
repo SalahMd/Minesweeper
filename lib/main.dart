@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/services/shared_pref.dart';
+import 'package:untitled/feautres/first_page/view/screens/first_page.dart';
 import 'package:untitled/feautres/home/view/screens/home_page.dart';
+import 'package:untitled/feautres/load_board/view/screens/load_board.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,9 +22,10 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(debugShowCheckedModeBanner: false, getPages: [
         GetPage(
           name: "/",
-          page: () => const HomePage(),
+          page: () => const FirstPage(),
         ),
-        //GetPage(name: "/Login", page: () => const Login()),
+        GetPage(name: "/LoadBoard", page: () => const LoadBoard()),
+        GetPage(name: "/HomePage", page: () => const HomePage()),
       ]),
     );
   }

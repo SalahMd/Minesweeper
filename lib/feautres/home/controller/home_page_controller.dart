@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
+import 'package:untitled/core/services/shared_pref.dart';
 
 class HomePageController extends GetxController {
   int numOfMines = 10,
@@ -21,6 +22,7 @@ class HomePageController extends GetxController {
       yBackMoves = [],
       xForwardMoves = [],
       yForwardMoves = [];
+  SharedPref sharedPref = Get.find();
   HomePageController({required this.context});
 
   @override
@@ -195,8 +197,7 @@ class HomePageController extends GetxController {
   }
 
   bool checkWin(int boardId) {
-    if (numOfOpenedCells[boardId] ==
-        (numOfRows * numOfColumns) - numOfMines) {
+    if (numOfOpenedCells[boardId] == (numOfRows * numOfColumns) - numOfMines) {
       isWin[boardId] = true;
       animationedAlertWithActions(AppAnimations.win, 'You won', () {
         replay(boardId);
@@ -216,12 +217,10 @@ class HomePageController extends GetxController {
   }
 
   void backMove(int boardId) {
-    print(numOfOpenedCells[boardId]);
     if (!isLost[boardId] &&
         numOfOpenedCells[boardId] > 0 &&
         yBackMoves[boardId].isNotEmpty) {
-      closeCells(
-          xBackMoves[boardId].last, yBackMoves[boardId].last, boardId);
+      closeCells(xBackMoves[boardId].last, yBackMoves[boardId].last, boardId);
       xForwardMoves[boardId].add(xBackMoves[boardId].last);
       yForwardMoves[boardId].add(yBackMoves[boardId].last);
       xBackMoves[boardId].removeLast();
@@ -231,8 +230,8 @@ class HomePageController extends GetxController {
 
   void forwardMove(int boardId) {
     if (yForwardMoves[boardId].isNotEmpty) {
-      openCells(xForwardMoves[boardId].last, yForwardMoves[boardId].last,
-          boardId);
+      openCells(
+          xForwardMoves[boardId].last, yForwardMoves[boardId].last, boardId);
       xBackMoves[boardId].add(xForwardMoves[boardId].last);
       yBackMoves[boardId].add(yForwardMoves[boardId].last);
       xForwardMoves[boardId].removeLast();
@@ -244,5 +243,12 @@ class HomePageController extends GetxController {
     numOfBoards++;
     initBoard(boardId + 1, false);
     update();
+  }
+
+  void saveBoard(int boardId) async {
+    //await sharedPref.sharedPreferences.setStringList('', []);
+    animationedAlertWithActions(AppAnimations.win, "Board is saved", () {
+      Get.back();
+    }, context);
   }
 }

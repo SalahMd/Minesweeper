@@ -14,6 +14,8 @@ dependencies:
   get: ^4.6.6
   flutter_sound: ^9.17.8
   shared_preferences: ^2.3.3
+  jiffy: ^6.3.2
+
 
 
 dev_dependencies:

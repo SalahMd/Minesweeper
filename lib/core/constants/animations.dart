@@ -7,4 +7,6 @@ class AppAnimations{
       Lottie.asset("${path}lose.json", repeat: false);
         static LottieBuilder win =
       Lottie.asset("${path}win.json", repeat: false,fit: BoxFit.fill);
+       static LottieBuilder done =
+      Lottie.asset("${path}done.json", repeat: false,fit: BoxFit.fill);
 }
