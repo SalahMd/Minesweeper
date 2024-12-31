@@ -1,4 +1,4 @@
-class BoardModel {
+class Board {
   List? cells, openedCells, mines;
   int? numOfOpenedCells;
   int? id;
@@ -9,8 +9,8 @@ class BoardModel {
   List? yBackMoves;
   List? xForwardMoves;
   List? yForwardMoves;
-  BoardModel(
-    this.seconds,
+  Board(
+      this.seconds,
       this.isLost,
       this.isWin,
       this.xBackMoves,

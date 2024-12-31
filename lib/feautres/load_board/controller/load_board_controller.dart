@@ -19,7 +19,6 @@ class LoadBoardController extends GetxController {
   loadBoard(int id) async {}
 
   loadAllBoards() {
-    print(numOfSavedBoards);
     for (int i = 1; i <= numOfSavedBoards; i++) {
       loadedBoardModels.add(LoadBoardModel(
           cells: json.decode(

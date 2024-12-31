@@ -32,10 +32,10 @@ class Board extends StatelessWidget {
         Movements(
           onBackMove: () {
           
-            controller.backMove(boardNum);
+            controller.backMove(controller.boards[boardNum]);
           },
           onForwardMove: () {
-            controller.forwardMove(boardNum);
+            controller.forwardMove(controller.boards[boardNum]);
           },
           onSaveBoard: () async{
            await controller.saveBoard(boardNum);
@@ -44,7 +44,7 @@ class Board extends StatelessWidget {
         SizedBox(height: 10.h),
         NewBoard(
           onNewBoard: () {
-            controller.addBoard(controller.numOfBoards - 1);
+            controller.addBoard(controller.boards[boardNum+1]);
           },
         )
       ],

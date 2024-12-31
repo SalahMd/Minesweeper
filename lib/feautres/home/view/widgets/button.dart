@@ -19,10 +19,10 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        controller.onTapButton(row, col, boardNum);
+        controller.onTapButton(row, col,controller.boards[boardNum] );
       },
       onLongPress: () {
-        controller.setFlag(boardNum, row, col);
+        controller.setFlag(controller.boards[boardNum], row, col);
       },
       child: Container(
           margin: EdgeInsets.all(2.sp),

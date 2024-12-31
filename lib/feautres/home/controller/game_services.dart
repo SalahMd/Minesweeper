@@ -8,8 +8,8 @@ import 'package:untitled/feautres/home/model/board_model.dart';
 
 class GameServices {
   SharedPref sharedPref = Get.find();
-  
-  saveBoard(BoardModel boards,BuildContext context) async {
+
+  saveBoard(Board boards, BuildContext context) async {
     int ctn;
     if (sharedPref.sharedPreferences.getInt('numOfSavedBoards') == null) {
       ctn = 0;
@@ -19,18 +19,18 @@ class GameServices {
 
     await sharedPref.sharedPreferences.setInt('numOfSavedBoards', ctn);
     await sharedPref.sharedPreferences.setInt('id${ctn.toString()}', ctn);
-    await sharedPref.sharedPreferences.setInt(
-        'numOfOpenedCells${ctn.toString()}', boards.numOfOpenedCells!);
+    await sharedPref.sharedPreferences
+        .setInt('numOfOpenedCells${ctn.toString()}', boards.numOfOpenedCells!);
+    await sharedPref.sharedPreferences
+        .setString('cells${ctn.toString()}', json.encode(boards.cells));
+    await sharedPref.sharedPreferences
+        .setString('mines${ctn.toString()}', json.encode(boards.mines));
     await sharedPref.sharedPreferences.setString(
-        'cells${ctn.toString()}', json.encode(boards.cells));
-    await sharedPref.sharedPreferences.setString(
-        'mines${ctn.toString()}', json.encode(boards.mines));
-    await sharedPref.sharedPreferences.setString('openedCells${ctn.toString()}',
-        json.encode(boards.openedCells));
+        'openedCells${ctn.toString()}', json.encode(boards.openedCells));
     await sharedPref.sharedPreferences
         .setString('date${ctn.toString()}', DateTime.now().toString());
     animationedAlertWithActions(AppAnimations.done, "Board is saved", () {
       Get.back();
-    }, context,icon: Icons.arrow_back);
+    }, context, icon: Icons.arrow_back);
   }
 }
