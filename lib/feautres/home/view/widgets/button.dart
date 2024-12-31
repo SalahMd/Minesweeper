@@ -31,24 +31,24 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               3.r,
             ),
-            border: controller.openedCells[boardNum][row][col]
+            border: controller.boards[boardNum].openedCells![row][col]
                 ? Border.all(color: AppColors.blueColor, width: 2)
                 : null,
-            color: controller.mines[boardNum][row][col] &&
-                    controller.isLost[boardNum]
+            color: controller.boards[boardNum].mines![row][col] &&
+                    controller.boards[boardNum].isLost!
                 ? AppColors.redColor
-                : controller.openedCells[boardNum][row][col]
+                : controller.boards[boardNum].openedCells![row][col]
                     ? AppColors.greenColor
                     : AppColors.greyColor,
           ),
-          child: controller.mines[boardNum][row][col] &&
-                  controller.isLost[boardNum]
+          child: controller.boards[boardNum].mines![row][col] &&
+                  controller.boards[boardNum].isLost!
               ? Image.asset(AppImages.mineImage)
-              : controller.cells[boardNum][row][col] == "f"
+              : controller.boards[boardNum].cells![row][col] == "f"
                   ? Image.asset(AppImages.flag)
-                  : Text(controller.cells[boardNum][row][col] != "f" &&
-                          controller.cells[boardNum][row][col] != null
-                      ? controller.cells[boardNum][row][col].toString()
+                  : Text(controller.boards[boardNum].cells![row][col] != "f" &&
+                          controller.boards[boardNum].cells![row][col] != null
+                      ? controller.boards[boardNum].cells![row][col].toString()
                       : '')),
     );
   }

@@ -26,15 +26,19 @@ class LoadBoard extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: controller.numOfSavedBoards,
+                  itemCount: controller.loadedBoardModels.length,
                   itemBuilder: (context, index) {
                     return LoadBoardWidget(
-                      boardName: 'Saved board',
+                      boardName: 'Saved board ${index + 1}',
                       date: controller.loadedBoardModels[index].date!,
                       onLoad: () {
-                     //   controller.loadBoard(index);
+                        controller
+                            .loadBoard(controller.loadedBoardModels[index].id!);
                       },
-                      onRemove: () {},
+                      onRemove: () {
+                        controller.deleteBoard(
+                            controller.loadedBoardModels[index].id!, index);
+                      },
                       id: controller.loadedBoardModels[index].id!,
                     );
                   }),

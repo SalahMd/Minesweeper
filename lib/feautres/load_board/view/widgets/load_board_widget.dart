@@ -23,12 +23,13 @@ class LoadBoardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        
-      },
+      onTap: () {},
       child: Container(
-        color: AppColors.whiteColor,
-        margin: EdgeInsets.symmetric(vertical: 10.h),
+        decoration: (BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          color: AppColors.loadBoardColor,
+        )),
+        margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
         width: Dimensions.screenWidth(context),
         padding: EdgeInsets.all(15.sp),
         child: Row(
@@ -50,7 +51,7 @@ class LoadBoardWidget extends StatelessWidget {
               ],
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: onRemove,
               child: Icon(
                 Icons.delete_outline,
                 size: 25.sp,

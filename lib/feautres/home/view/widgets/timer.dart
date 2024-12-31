@@ -85,7 +85,7 @@ class Timer extends StatelessWidget {
                   color: AppColors.redColor,
                 ),
                 Text(
-                  controller.seconds[numOfBoard].toString(),
+                  controller.boards[numOfBoard].seconds.toString(),
                   style: TextStyles.w50018Green(context),
                 ),
               ],

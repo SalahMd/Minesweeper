@@ -19,19 +19,31 @@ class LoadBoardController extends GetxController {
   loadBoard(int id) async {}
 
   loadAllBoards() {
-    for (int i = 0; i < numOfSavedBoards; i++) {
+    print(numOfSavedBoards);
+    for (int i = 1; i <= numOfSavedBoards; i++) {
       loadedBoardModels.add(LoadBoardModel(
-          cells: json.decode(sharedPref.sharedPreferences
-              .getString("cells${(i + 1).toString()}")!),
+          cells: json.decode(
+              sharedPref.sharedPreferences.getString("cells${i.toString()}")!),
           openedCells: json.decode(sharedPref.sharedPreferences
-              .getString("openedCells${(i + 1).toString()}")!),
-          id: sharedPref.sharedPreferences.getInt("id${(i + 1).toString()}")!,
-          mines: json.decode(sharedPref.sharedPreferences
-              .getString("mines${(i + 1).toString()}")!),
+              .getString("openedCells${i.toString()}")!),
+          id: sharedPref.sharedPreferences.getInt("id${i.toString()}")!,
+          mines: json.decode(
+              sharedPref.sharedPreferences.getString("mines${i.toString()}")!),
           numOfOpenedCells: sharedPref.sharedPreferences
-              .getInt("numOfOpenedCells${(i + 1).toString()}")!,
-          date: sharedPref.sharedPreferences
-              .getString('date${(i + 1).toString()}')));
+              .getInt("numOfOpenedCells${i.toString()}")!,
+          date: sharedPref.sharedPreferences.getString('date${i.toString()}')));
     }
+  }
+
+  deleteBoard(int id, int index) {
+    sharedPref.sharedPreferences.remove('cells${id.toString()}');
+    sharedPref.sharedPreferences.remove('openedCells${id.toString()}');
+    sharedPref.sharedPreferences.remove('mines${id.toString()}');
+    sharedPref.sharedPreferences.remove('numOfOpenedCells${id.toString()}');
+    sharedPref.sharedPreferences.remove('date${id.toString()}');
+    int ctn = numOfSavedBoards - 1;
+    sharedPref.sharedPreferences.setInt("numOfSavedBoards", ctn);
+    loadedBoardModels.removeAt(index);
+    update();
   }
 }
