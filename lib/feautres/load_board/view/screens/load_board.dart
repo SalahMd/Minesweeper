@@ -36,10 +36,7 @@ class LoadBoard extends StatelessWidget {
                         controller
                             .loadBoard(controller.loadedBoardModels[index].id!);
                       },
-                      onRemove: () {
-                        controller.deleteBoard(
-                            controller.loadedBoardModels[index].id!, index);
-                      },
+                      
                       id: controller.loadedBoardModels[index].id!,
                     );
                   }),

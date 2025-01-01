@@ -11,8 +11,8 @@ class HomePageController extends GetxController {
   int numOfMines = 10,
       numOfRows = 9,
       numOfColumns = 8,
-      numOfCells = 72,
-      numOfBoards = 0;
+      numOfCells = 72
+      ;
   Random random = Random();
   late Timer timer;
   final BuildContext context;
@@ -22,25 +22,31 @@ class HomePageController extends GetxController {
 
   @override
   void onInit() {
-    numOfBoards++;
     if (Get.arguments != null) {
       boards.add(Get.arguments);
+      //boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
       startTimer(Get.arguments);
       update();
     } else {
-      boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
-      initBoard(false, boards.last);
+      //boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
+      initBoard(
+        false,
+      );
     }
     super.onInit();
   }
 
-  void initBoard(bool replay, Board board) {
-    boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
+  void initBoard(bool replay, {Board? board}) {
     if (replay) {
-      cleanBoard(board);
+      cleanBoard(board!);
+      minesDistribution(board);
+      startTimer(board);
+    } else {
+      boards.add(Board.generateBoard(numOfRows, numOfColumns, boards.length+1));
+
+      minesDistribution(boards.last);
+      startTimer(boards.last);
     }
-    minesDistribution(board);
-    startTimer(board);
     update();
   }
 
@@ -165,7 +171,7 @@ class HomePageController extends GetxController {
     board.isWin = false;
     board.isLost = false;
     board.numOfOpenedCells = 0;
-    initBoard(true, board);
+    initBoard(true, board: board);
   }
 
   void backMove(Board board) {
@@ -201,9 +207,10 @@ class HomePageController extends GetxController {
     }
   }
 
-  void addBoard(Board board) {
-    numOfBoards++;
-    initBoard(false, board);
+  void addBoard() {
+    initBoard(
+      false,
+    );
   }
 
   saveBoard(int boardId) {

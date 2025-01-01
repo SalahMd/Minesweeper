@@ -35,18 +35,6 @@ class LoadBoardController extends GetxController {
     }
   }
 
-  deleteBoard(int id, int index) {
-    sharedPref.sharedPreferences.remove('cells${id.toString()}');
-    sharedPref.sharedPreferences.remove('openedCells${id.toString()}');
-    sharedPref.sharedPreferences.remove('mines${id.toString()}');
-    sharedPref.sharedPreferences.remove('numOfOpenedCells${id.toString()}');
-    sharedPref.sharedPreferences.remove('date${id.toString()}');
-    int ctn = numOfSavedBoards - 1;
-    sharedPref.sharedPreferences.setInt("numOfSavedBoards", ctn);
-    loadedBoardModels.removeAt(index);
-    update();
-  }
-
   loadBoard(int boardId) {
     Get.to(const HomePage(),arguments: game.loadBoard(boardId));
   }

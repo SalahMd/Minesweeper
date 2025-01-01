@@ -10,14 +10,12 @@ class LoadBoardWidget extends StatelessWidget {
   final String boardName;
   final String date;
   final void Function() onLoad;
-  final void Function() onRemove;
   final int id;
   const LoadBoardWidget(
       {super.key,
       required this.boardName,
       required this.date,
       required this.onLoad,
-      required this.onRemove,
       required this.id});
 
   @override
@@ -50,14 +48,7 @@ class LoadBoardWidget extends StatelessWidget {
                     .toString())
               ],
             ),
-            GestureDetector(
-              onTap: onRemove,
-              child: Icon(
-                Icons.delete_outline,
-                size: 25.sp,
-                color: AppColors.redColor,
-              ),
-            )
+           
           ],
         ),
       ),
