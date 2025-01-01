@@ -3,8 +3,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/core/helpers/dimenesions.dart';
-import 'package:untitled/feautres/home/controller/home_page_controller.dart';
-import 'package:untitled/feautres/home/view/widgets/button.dart';
+import 'package:untitled/features/home/controller/home_page_controller.dart';
+import 'package:untitled/features/home/view/widgets/button.dart';
 
 class Grid extends StatelessWidget {
   final int numOfCells, numOfColumns;

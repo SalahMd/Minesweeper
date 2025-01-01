@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:untitled/feautres/home/controller/home_page_controller.dart';
-import 'package:untitled/feautres/home/view/widgets/grid.dart';
-import 'package:untitled/feautres/home/view/widgets/movements.dart';
-import 'package:untitled/feautres/home/view/widgets/new_board.dart';
-import 'package:untitled/feautres/home/view/widgets/timer.dart';
+import 'package:untitled/features/home/controller/home_page_controller.dart';
+import 'package:untitled/features/home/view/widgets/grid.dart';
+import 'package:untitled/features/home/view/widgets/movements.dart';
+import 'package:untitled/features/home/view/widgets/new_board.dart';
+import 'package:untitled/features/home/view/widgets/timer.dart';
 
 class Board extends StatelessWidget {
   final HomePageController controller;

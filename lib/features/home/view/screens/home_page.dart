@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:untitled/feautres/home/controller/home_page_controller.dart';
-import 'package:untitled/feautres/home/view/widgets/board.dart';
-import 'package:untitled/feautres/home/view/widgets/top_bar.dart';
+import 'package:untitled/features/home/controller/home_page_controller.dart';
+import 'package:untitled/features/home/view/widgets/board.dart';
+import 'package:untitled/features/home/view/widgets/top_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

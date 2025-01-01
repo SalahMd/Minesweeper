@@ -8,6 +8,4 @@ class AppAnimations {
       Lottie.asset("${path}win.json", repeat: false, fit: BoxFit.fill);
   static LottieBuilder done =
       Lottie.asset("${path}done.json", repeat: false, fit: BoxFit.fill);
-  static LottieBuilder firstPage =
-      Lottie.asset("${path}first_page.json", repeat: false, fit: BoxFit.fill);
 }

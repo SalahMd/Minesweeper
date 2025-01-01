@@ -9,6 +9,7 @@ class Board {
   List? yBackMoves;
   List? xForwardMoves;
   List? yForwardMoves;
+  List? flags;
   Board(
       this.seconds,
       this.isLost,
@@ -21,7 +22,8 @@ class Board {
       this.openedCells,
       this.mines,
       this.numOfOpenedCells,
-      this.id);
+      this.id,
+      this.flags);
   static generateBoard(int numOfRows, int numOfColumns, int numOfBoards) {
     Board board = Board(
         0,
@@ -50,7 +52,8 @@ class Board {
                   (index) => false,
                 )),
         0,
-        numOfBoards);
+        numOfBoards,
+        []);
     return board;
   }
 
@@ -73,10 +76,14 @@ class Board {
               numOfColumns,
               (index) => null,
             ));
+
     board.seconds = 0;
     board.isWin = false;
     board.isLost = false;
-        board.numOfOpenedCells = 0;
-
+    board.numOfOpenedCells = 0;
+    board.xBackMoves=[];
+    board.yBackMoves=[];
+    board.xForwardMoves=[];
+    board.yForwardMoves=[];
   }
 }

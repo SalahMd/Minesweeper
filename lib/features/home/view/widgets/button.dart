@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/core/constants/images.dart';
-import 'package:untitled/feautres/home/controller/home_page_controller.dart';
+import 'package:untitled/features/home/controller/home_page_controller.dart';
 
 class Button extends StatelessWidget {
   final HomePageController controller;
@@ -47,7 +47,7 @@ class Button extends StatelessWidget {
               : controller.boards[boardNum].cells![row][col] == "f"
                   ? Image.asset(AppImages.flag)
                   : Text(controller.boards[boardNum].cells![row][col] != "f" &&
-                          controller.boards[boardNum].cells![row][col] != null
+                          controller.boards[boardNum].cells![row][col] != null &&controller.boards[boardNum].cells![row][col]!='ff'
                       ? controller.boards[boardNum].cells![row][col].toString()
                       : '')),
     );

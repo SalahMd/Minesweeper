@@ -5,7 +5,7 @@ import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/core/constants/images.dart';
 import 'package:untitled/core/helpers/dimenesions.dart';
 import 'package:untitled/core/themes/text_styles.dart';
-import 'package:untitled/feautres/home/controller/home_page_controller.dart';
+import 'package:untitled/features/home/controller/home_page_controller.dart';
 
 class Timer extends StatelessWidget {
   final int numOfMines, numOfBoard;
@@ -28,7 +28,7 @@ class Timer extends StatelessWidget {
         children: [
           Container(
             width: 80.w,
-            height: 60.h,
+            height: 50.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
               color: AppColors.blackColor,
@@ -57,7 +57,7 @@ class Timer extends StatelessWidget {
             },
             child: Container(
                 width: 60.w,
-                height: 60.h,
+                height: 50.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   color: AppColors.darkGrey,
@@ -70,7 +70,7 @@ class Timer extends StatelessWidget {
           ),
           Container(
             width: 80.w,
-            height: 60.h,
+            height: 50.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
               color: AppColors.blackColor,

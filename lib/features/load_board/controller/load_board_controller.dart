@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:untitled/core/services/shared_pref.dart';
 import 'package:untitled/core/services/game_services.dart';
-import 'package:untitled/feautres/load_board/model/load_board_model.dart';
+import 'package:untitled/features/load_board/model/load_board_model.dart';
 
 class LoadBoardController extends GetxController {
   SharedPref sharedPref = Get.find();
   List<LoadBoardModel> loadedBoardModels = [];
-  GameServices gameServices = Get.find();
+  GameServices gameServices =GameServices();
   int numOfSavedBoards = 0;
 
   @override

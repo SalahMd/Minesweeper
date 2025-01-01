@@ -3,9 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/colors.dart';
-import 'package:untitled/feautres/home/view/widgets/top_bar.dart';
-import 'package:untitled/feautres/load_board/controller/load_board_controller.dart';
-import 'package:untitled/feautres/load_board/view/widgets/load_board_widget.dart';
+import 'package:untitled/features/home/view/widgets/top_bar.dart';
+import 'package:untitled/features/load_board/controller/load_board_controller.dart';
+import 'package:untitled/features/load_board/view/widgets/load_board_widget.dart';
 
 class LoadBoard extends StatelessWidget {
   const LoadBoard({super.key});

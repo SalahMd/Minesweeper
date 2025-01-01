@@ -5,14 +5,14 @@ import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/core/services/game_services.dart';
-import 'package:untitled/feautres/home/model/board.dart';
+import 'package:untitled/features/home/model/board.dart';
 
 class HomePageController extends GetxController {
   int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
   Random random = Random();
   late Timer timer;
   final BuildContext context;
-  GameServices gameServices = Get.find();
+  GameServices gameServices = GameServices();
   List<Board> boards = [];
   HomePageController({required this.context});
 
@@ -20,7 +20,7 @@ class HomePageController extends GetxController {
   void onInit() {
     if (Get.arguments != null) {
       boards.add(Get.arguments);
-      startTimer(Get.arguments,false);
+      startTimer(Get.arguments, false);
       update();
     } else {
       initBoard(false);
@@ -32,17 +32,17 @@ class HomePageController extends GetxController {
     if (replay) {
       board!.cleanBoard(board, numOfRows, numOfColumns);
       minesDistribution(board);
-      startTimer(board,true);
+      startTimer(board, true);
     } else {
       boards
           .add(Board.generateBoard(numOfRows, numOfColumns, boards.length + 1));
       minesDistribution(boards.last);
-      startTimer(boards.last,false);
+      startTimer(boards.last, false);
     }
     update();
   }
 
-  void startTimer(Board board,bool replay) {
+  void startTimer(Board board, bool replay) {
     if (!replay) {
       timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
         if (!board.isLost! && !board.isWin!) {
@@ -126,7 +126,7 @@ class HomePageController extends GetxController {
           } else if (count != 0) {
             board.cells![i][j] = null;
           }
-          board.numOfOpenedCells != board.numOfOpenedCells! - 1;
+          board.numOfOpenedCells = board.numOfOpenedCells! - 1;
         }
       }
     }
@@ -163,11 +163,33 @@ class HomePageController extends GetxController {
     if (!board.isLost! &&
         board.numOfOpenedCells! > 0 &&
         board.yBackMoves!.isNotEmpty) {
-      closeCells(board.xBackMoves!.last, board.yBackMoves!.last, board);
-      board.xForwardMoves!.add(board.xBackMoves!.last);
-      board.yForwardMoves!.add(board.yBackMoves!.last);
+      if (board.cells![board.xBackMoves!.last][board.yBackMoves!.last] == 'f') {
+        board.cells![board.xBackMoves!.last][board.yBackMoves!.last] = 'ff';
+      } else {
+        board.xForwardMoves!.add(board.xBackMoves!.last);
+        board.yForwardMoves!.add(board.yBackMoves!.last);
+        closeCells(board.xBackMoves!.last, board.yBackMoves!.last, board);
+      }
+
       board.xBackMoves!.removeLast();
       board.yBackMoves!.removeLast();
+    }
+    print(board.xForwardMoves);
+    update();
+  }
+
+  void forwardMove(Board board) {
+    print(board.yForwardMoves!);
+    if (board.yForwardMoves!.isNotEmpty) {
+      if (board.cells![board.xForwardMoves!.last][board.yForwardMoves!.last] ==
+          'ff') {
+        setFlag(board, board.xForwardMoves!.last, board.yForwardMoves!.last);
+      } else {
+        openCells(board.xForwardMoves!.last, board.yForwardMoves!.last, board);
+        fillMovesList(
+            board, board.xForwardMoves!.last, board.yForwardMoves!.last,
+            fillForwardMoves: false);
+      }
     }
   }
 
@@ -184,14 +206,6 @@ class HomePageController extends GetxController {
     }
   }
 
-  void forwardMove(Board board) {
-    if (board.yForwardMoves!.isNotEmpty) {
-      openCells(board.xForwardMoves!.last, board.yForwardMoves!.last, board);
-      fillMovesList(board, board.xForwardMoves!.last, board.yForwardMoves!.last,
-          fillForwardMoves: false);
-    }
-  }
-
   saveBoard(int boardId) {
     gameServices.saveBoard(boards[boardId], context);
   }
@@ -199,7 +213,7 @@ class HomePageController extends GetxController {
   setFlag(Board board, int posX, int posY) {
     if (isEmptyCell(board, posX, posY) && board.cells![posX][posY] != 'f') {
       board.cells![posX][posY] = "f";
-      fillMovesList(board, 'f', 'f');
+      fillMovesList(board, posX, posY);
     }
     update();
   }

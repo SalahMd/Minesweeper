@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/core/services/shared_pref.dart';
-import 'package:untitled/feautres/home/model/board.dart';
+import 'package:untitled/features/home/model/board.dart';
 
 class GameServices {
   SharedPref sharedPref = Get.find();
@@ -52,7 +52,7 @@ class GameServices {
             .getString("mines${boardId.toString()}")!),
         sharedPref.sharedPreferences
             .getInt("numOfOpenedCells${boardId.toString()}")!,
-        sharedPref.sharedPreferences.getInt("id${boardId.toString()}")!);
+        sharedPref.sharedPreferences.getInt("id${boardId.toString()}")!,[]);
     return board;
   }
 }
