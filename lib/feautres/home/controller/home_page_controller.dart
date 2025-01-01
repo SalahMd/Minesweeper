@@ -4,19 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
-import 'package:untitled/feautres/home/controller/game_services.dart';
+import 'package:untitled/core/services/game_services.dart';
 import 'package:untitled/feautres/home/model/board.dart';
 
 class HomePageController extends GetxController {
-  int numOfMines = 10,
-      numOfRows = 9,
-      numOfColumns = 8,
-      numOfCells = 72
-      ;
+  int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
   Random random = Random();
   late Timer timer;
   final BuildContext context;
-  GameServices gameServices = GameServices();
+  GameServices gameServices = Get.find();
   List<Board> boards = [];
   HomePageController({required this.context});
 
@@ -24,11 +20,9 @@ class HomePageController extends GetxController {
   void onInit() {
     if (Get.arguments != null) {
       boards.add(Get.arguments);
-      //boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
       startTimer(Get.arguments);
       update();
     } else {
-      //boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
       initBoard(
         false,
       );
@@ -38,12 +32,12 @@ class HomePageController extends GetxController {
 
   void initBoard(bool replay, {Board? board}) {
     if (replay) {
-      cleanBoard(board!);
+      board!.cleanBoard(board, numOfRows, numOfColumns);
       minesDistribution(board);
       startTimer(board);
     } else {
-      boards.add(Board.generateBoard(numOfRows, numOfColumns, boards.length+1));
-
+      boards
+          .add(Board.generateBoard(numOfRows, numOfColumns, boards.length + 1));
       minesDistribution(boards.last);
       startTimer(boards.last);
     }
@@ -145,7 +139,7 @@ class HomePageController extends GetxController {
     if (board.mines![x][y] || isTimed) {
       board.isLost = true;
       animationedAlertWithActions(AppAnimations.lose, 'You lost', () {
-        replay(board);
+        initBoard(true, board: board);
         Get.back();
       }, context);
       update();
@@ -158,20 +152,13 @@ class HomePageController extends GetxController {
     if (board.numOfOpenedCells == (numOfRows * numOfColumns) - numOfMines) {
       board.isWin = true;
       animationedAlertWithActions(AppAnimations.win, 'You won', () {
-        replay(board);
+        initBoard(true, board: board);
         Get.back();
       }, context);
       update();
       return true;
     }
     return false;
-  }
-
-  void replay(Board board) {
-    board.isWin = false;
-    board.isLost = false;
-    board.numOfOpenedCells = 0;
-    initBoard(true, board: board);
   }
 
   void backMove(Board board) {
@@ -207,12 +194,6 @@ class HomePageController extends GetxController {
     }
   }
 
-  void addBoard() {
-    initBoard(
-      false,
-    );
-  }
-
   saveBoard(int boardId) {
     gameServices.saveBoard(boards[boardId], context);
   }
@@ -227,27 +208,5 @@ class HomePageController extends GetxController {
 
   bool isEmptyCell(Board board, int posX, int posY) {
     return !board.openedCells![posX][posY] && !board.isLost! && !board.isWin!;
-  }
-
-  cleanBoard(Board board) {
-    board.mines = List<List>.generate(
-        numOfRows,
-        (i) => List<dynamic>.generate(
-              numOfColumns,
-              (index) => false,
-            ));
-    board.openedCells = List<List>.generate(
-        numOfRows,
-        (i) => List<dynamic>.generate(
-              numOfColumns,
-              (index) => false,
-            ));
-    board.cells = List<List>.generate(
-        numOfRows,
-        (i) => List<dynamic>.generate(
-              numOfColumns,
-              (index) => null,
-            ));
-    board.seconds = 1;
   }
 }

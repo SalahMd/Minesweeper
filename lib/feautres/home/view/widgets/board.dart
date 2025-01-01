@@ -44,7 +44,7 @@ class Board extends StatelessWidget {
         SizedBox(height: 10.h),
         NewBoard(
           onNewBoard: () {
-            controller.addBoard();
+            controller.initBoard(false);
           },
         )
       ],

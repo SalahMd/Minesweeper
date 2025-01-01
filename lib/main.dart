@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:untitled/core/dependencies/dependencies.dart';
 import 'package:untitled/core/services/shared_pref.dart';
 import 'package:untitled/feautres/first_page/view/screens/first_page.dart';
 import 'package:untitled/feautres/home/view/screens/home_page.dart';
@@ -9,6 +10,7 @@ import 'package:untitled/feautres/load_board/view/screens/load_board.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initialServices();
+  injectDependecies();
   runApp(const MyApp());
 }
 

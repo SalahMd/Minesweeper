@@ -22,7 +22,7 @@ class Board {
       this.mines,
       this.numOfOpenedCells,
       this.id);
- static generateBoard(int numOfRows, int numOfColumns, int numOfBoards) {
+  static generateBoard(int numOfRows, int numOfColumns, int numOfBoards) {
     Board board = Board(
         0,
         false,
@@ -52,5 +52,31 @@ class Board {
         0,
         numOfBoards);
     return board;
+  }
+
+  cleanBoard(Board board, int numOfRows, int numOfColumns) {
+    board.mines = List<List>.generate(
+        numOfRows,
+        (i) => List<dynamic>.generate(
+              numOfColumns,
+              (index) => false,
+            ));
+    board.openedCells = List<List>.generate(
+        numOfRows,
+        (i) => List<dynamic>.generate(
+              numOfColumns,
+              (index) => false,
+            ));
+    board.cells = List<List>.generate(
+        numOfRows,
+        (i) => List<dynamic>.generate(
+              numOfColumns,
+              (index) => null,
+            ));
+    board.seconds = 1;
+    board.isWin = false;
+    board.isLost = false;
+        board.numOfOpenedCells = 0;
+
   }
 }

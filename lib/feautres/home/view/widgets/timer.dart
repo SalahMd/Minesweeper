@@ -53,7 +53,7 @@ class Timer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              controller.replay(controller.boards[numOfBoard]);
+              controller.initBoard(true,board:controller.boards[numOfBoard]);
             },
             child: Container(
                 width: 60.w,
