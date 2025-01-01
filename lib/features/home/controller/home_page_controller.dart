@@ -74,7 +74,8 @@ class HomePageController extends GetxController {
     }
     if (isEmptyCell(board, posX, posY)) {
       openCells(posX, posY, board);
-      fillMovesList(board, posX, posY);
+      board.xBackMoves!.add(posX);
+      board.yBackMoves!.add(posY);
     }
     update();
   }
@@ -166,24 +167,26 @@ class HomePageController extends GetxController {
       if (board.cells![board.xBackMoves!.last][board.yBackMoves!.last] == 'f') {
         board.cells![board.xBackMoves!.last][board.yBackMoves!.last] = 'ff';
       } else {
-        board.xForwardMoves!.add(board.xBackMoves!.last);
-        board.yForwardMoves!.add(board.yBackMoves!.last);
         closeCells(board.xBackMoves!.last, board.yBackMoves!.last, board);
       }
-
+      board.xForwardMoves!.add(board.xBackMoves!.last);
+      board.yForwardMoves!.add(board.yBackMoves!.last);
       board.xBackMoves!.removeLast();
       board.yBackMoves!.removeLast();
     }
     print(board.xForwardMoves);
+    print(board.xBackMoves);
+
     update();
   }
 
   void forwardMove(Board board) {
-    print(board.yForwardMoves!);
-    if (board.yForwardMoves!.isNotEmpty) {
+    if (board.xForwardMoves!.isNotEmpty) {
       if (board.cells![board.xForwardMoves!.last][board.yForwardMoves!.last] ==
           'ff') {
         setFlag(board, board.xForwardMoves!.last, board.yForwardMoves!.last);
+         board.xForwardMoves!.removeLast();
+      board.yForwardMoves!.removeLast();
       } else {
         openCells(board.xForwardMoves!.last, board.yForwardMoves!.last, board);
         fillMovesList(
@@ -191,6 +194,8 @@ class HomePageController extends GetxController {
             fillForwardMoves: false);
       }
     }
+    print(board.xForwardMoves);
+    print(board.xBackMoves);
   }
 
   fillMovesList(Board board, var valX, var valY,
@@ -213,7 +218,8 @@ class HomePageController extends GetxController {
   setFlag(Board board, int posX, int posY) {
     if (isEmptyCell(board, posX, posY) && board.cells![posX][posY] != 'f') {
       board.cells![posX][posY] = "f";
-      fillMovesList(board, posX, posY);
+      board.xBackMoves!.add(posX);
+      board.yBackMoves!.add(posY);
     }
     update();
   }
