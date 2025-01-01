@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/feautres/home/controller/game_services.dart';
-import 'package:untitled/feautres/home/model/board_model.dart';
+import 'package:untitled/feautres/home/model/board.dart';
 
 class HomePageController extends GetxController {
   int numOfMines = 10,
@@ -23,44 +23,19 @@ class HomePageController extends GetxController {
   @override
   void onInit() {
     numOfBoards++;
-    generateLists();
+    if (Get.arguments != null) {
+      boards.add(Get.arguments);
+      startTimer(Get.arguments);
+      update();
+    } else {
+      boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
+      initBoard(false, boards.last);
+    }
     super.onInit();
-    initBoard(false, boards.last);
-  }
-
-  void generateLists() {
-    boards.add(Board(
-        0,
-        false,
-        false,
-        [],
-        [],
-        [],
-        [],
-        List<List>.generate(
-            numOfRows,
-            (i) => List<dynamic>.generate(
-                  numOfColumns,
-                  (index) => null,
-                )),
-        List<List>.generate(
-            numOfRows,
-            (i) => List<dynamic>.generate(
-                  numOfColumns,
-                  (index) => false,
-                )),
-        List<List>.generate(
-            numOfRows,
-            (i) => List<dynamic>.generate(
-                  numOfColumns,
-                  (index) => false,
-                )),
-        0,
-        numOfBoards));
   }
 
   void initBoard(bool replay, Board board) {
-    generateLists();
+    boards.add(Board.generateBoard(numOfRows, numOfColumns, numOfBoards));
     if (replay) {
       cleanBoard(board);
     }
@@ -167,7 +142,6 @@ class HomePageController extends GetxController {
         replay(board);
         Get.back();
       }, context);
-
       update();
       return true;
     }
@@ -230,7 +204,6 @@ class HomePageController extends GetxController {
   void addBoard(Board board) {
     numOfBoards++;
     initBoard(false, board);
-    update();
   }
 
   saveBoard(int boardId) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/colors.dart';
@@ -42,7 +43,7 @@ class LoadBoard extends StatelessWidget {
                       id: controller.loadedBoardModels[index].id!,
                     );
                   }),
-            )
+            ).animate().fade(duration: 600.ms).slideY(begin: 0.3)
           ],
         ),
       ),

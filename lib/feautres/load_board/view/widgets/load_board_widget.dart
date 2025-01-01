@@ -23,7 +23,7 @@ class LoadBoardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onLoad,
       child: Container(
         decoration: (BoxDecoration(
           borderRadius: BorderRadius.circular(12.r),

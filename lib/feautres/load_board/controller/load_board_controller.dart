@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:untitled/core/services/shared_pref.dart';
+import 'package:untitled/feautres/home/controller/game_services.dart';
+import 'package:untitled/feautres/home/view/screens/home_page.dart';
 import 'package:untitled/feautres/load_board/model/load_board_model.dart';
 
 class LoadBoardController extends GetxController {
   SharedPref sharedPref = Get.find();
   List<LoadBoardModel> loadedBoardModels = [];
+  GameServices game = GameServices();
   int numOfSavedBoards = 0;
 
   @override
@@ -15,8 +18,6 @@ class LoadBoardController extends GetxController {
     loadAllBoards();
     super.onInit();
   }
-
-  loadBoard(int id) async {}
 
   loadAllBoards() {
     for (int i = 1; i <= numOfSavedBoards; i++) {
@@ -44,5 +45,9 @@ class LoadBoardController extends GetxController {
     sharedPref.sharedPreferences.setInt("numOfSavedBoards", ctn);
     loadedBoardModels.removeAt(index);
     update();
+  }
+
+  loadBoard(int boardId) {
+    Get.to(const HomePage(),arguments: game.loadBoard(boardId));
   }
 }

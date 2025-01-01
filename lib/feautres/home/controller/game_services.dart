@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/core/services/shared_pref.dart';
-import 'package:untitled/feautres/home/model/board_model.dart';
+import 'package:untitled/feautres/home/model/board.dart';
 
 class GameServices {
   SharedPref sharedPref = Get.find();
 
-  saveBoard(Board boards, BuildContext context) async {
+  void saveBoard(Board boards, BuildContext context) async {
     int ctn;
     if (sharedPref.sharedPreferences.getInt('numOfSavedBoards') == null) {
       ctn = 0;
@@ -32,5 +32,27 @@ class GameServices {
     animationedAlertWithActions(AppAnimations.done, "Board is saved", () {
       Get.back();
     }, context, icon: Icons.arrow_back);
+  }
+
+  Board loadBoard(int boardId)  {
+    Board board = Board(
+        0,
+        false,
+        false,
+        [],
+        [],
+        [],
+        [],
+        json.decode(sharedPref.sharedPreferences
+            .getString("cells${boardId.toString()}")!),
+        json.decode(sharedPref.sharedPreferences
+            .getString("openedCells${boardId.toString()}")!),
+        json.decode(sharedPref.sharedPreferences
+            .getString("mines${boardId.toString()}")!),
+        sharedPref.sharedPreferences
+            .getInt("numOfOpenedCells${boardId.toString()}")!,
+        sharedPref.sharedPreferences.getInt("id${boardId.toString()}")!);
+    print(board.mines);
+    return board;
   }
 }
