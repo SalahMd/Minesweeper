@@ -23,7 +23,7 @@ class NewBoard extends StatelessWidget {
             border: Border.all(color: AppColors.blueColor)),
         child: Text(
           "New board",
-          style: TextStyles.w40014Wgite(context),
+          style: TextStyles.w50014White(context),
         ),
       ),
     ));

@@ -73,7 +73,7 @@ class Board {
               numOfColumns,
               (index) => null,
             ));
-    board.seconds = 1;
+    board.seconds = 0;
     board.isWin = false;
     board.isLost = false;
         board.numOfOpenedCells = 0;

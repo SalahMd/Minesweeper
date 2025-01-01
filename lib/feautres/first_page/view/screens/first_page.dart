@@ -15,12 +15,12 @@ class FirstPage extends StatelessWidget {
       backgroundColor: AppColors.greyColor,
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             width: Dimensions.screenWidth(context),
             height: Dimensions.screenHeight(context),
             child: Image.asset(
               AppImages.logo,
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.cover,
             ),
           ),
           Column(
@@ -32,7 +32,7 @@ class FirstPage extends StatelessWidget {
                   child: SafeArea(
                       child: Text(
                 'Mineswweper',
-                style: TextStyles.bold22(context),
+                style: TextStyles.bold25(context),
               ))),
               SizedBox(
                 height: 20.h,
@@ -47,9 +47,11 @@ class FirstPage extends StatelessWidget {
                   margin: EdgeInsets.symmetric(vertical: 10.h),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: AppColors.darkGrey, border: Border.all()),
+                      borderRadius: BorderRadius.circular(12.r),
+                      color: AppColors.darkGrey,
+                      border: Border.all(width: 2)),
                   child:
-                      Text('New game', style: TextStyles.w40014Wgite(context)),
+                      Text('New game', style: TextStyles.w50016White(context)),
                 ),
               ),
               GestureDetector(
@@ -62,9 +64,11 @@ class FirstPage extends StatelessWidget {
                   margin: EdgeInsets.symmetric(vertical: 10.h),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: AppColors.darkGrey, border: Border.all()),
+                      borderRadius: BorderRadius.circular(12.r),
+                      color: AppColors.darkGrey,
+                      border: Border.all(width: 2)),
                   child:
-                      Text('Load game', style: TextStyles.w40014Wgite(context)),
+                      Text('Load game', style: TextStyles.w50016White(context)),
                 ),
               ),
             ],

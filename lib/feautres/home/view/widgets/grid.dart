@@ -32,7 +32,7 @@ class Grid extends StatelessWidget {
                   crossAxisCount: numOfColumns,
                 ),
                 itemBuilder: (context, index) {
-                  int x = (index / 8).toInt();
+                  int x = index ~/ 8;
                   int y = (index % 8).toInt();
                   return Button(
                     row: x,

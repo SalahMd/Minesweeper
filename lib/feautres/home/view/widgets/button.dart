@@ -17,7 +17,7 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         controller.onTapButton(row, col,controller.boards[boardNum] );
       },

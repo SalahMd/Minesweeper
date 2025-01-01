@@ -20,12 +20,10 @@ class HomePageController extends GetxController {
   void onInit() {
     if (Get.arguments != null) {
       boards.add(Get.arguments);
-      startTimer(Get.arguments);
+      startTimer(Get.arguments,false);
       update();
     } else {
-      initBoard(
-        false,
-      );
+      initBoard(false);
     }
     super.onInit();
   }
@@ -34,18 +32,18 @@ class HomePageController extends GetxController {
     if (replay) {
       board!.cleanBoard(board, numOfRows, numOfColumns);
       minesDistribution(board);
-      startTimer(board);
+      startTimer(board,true);
     } else {
       boards
           .add(Board.generateBoard(numOfRows, numOfColumns, boards.length + 1));
       minesDistribution(boards.last);
-      startTimer(boards.last);
+      startTimer(boards.last,false);
     }
     update();
   }
 
-  void startTimer(Board board) {
-    if (board.seconds == 0) {
+  void startTimer(Board board,bool replay) {
+    if (!replay) {
       timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
         if (!board.isLost! && !board.isWin!) {
           if (board.seconds == 200) {

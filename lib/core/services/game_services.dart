@@ -31,6 +31,7 @@ class GameServices {
         .setString('date${ctn.toString()}', DateTime.now().toString());
     animationedAlertWithActions(AppAnimations.done, "Board is saved", () {
       Get.back();
+    // ignore: use_build_context_synchronously
     }, context, icon: Icons.arrow_back);
   }
 
@@ -52,7 +53,6 @@ class GameServices {
         sharedPref.sharedPreferences
             .getInt("numOfOpenedCells${boardId.toString()}")!,
         sharedPref.sharedPreferences.getInt("id${boardId.toString()}")!);
-    print(board.mines);
     return board;
   }
 }
