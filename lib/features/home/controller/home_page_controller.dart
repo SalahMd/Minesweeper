@@ -15,12 +15,11 @@ class HomePageController extends GetxController {
   GameServices gameServices = GameServices();
   List<Board> boards = [];
   HomePageController({required this.context});
-
   @override
-  void onInit() {
-    if (Get.arguments != null) {
-      boards.add(Get.arguments);
-      startTimer(Get.arguments, false);
+  void onInit()async {
+    if (await Get.arguments != null) {
+      boards.add(await Get.arguments);
+      startTimer(await Get.arguments, false);
       update();
     } else {
       initBoard(false);
@@ -31,12 +30,12 @@ class HomePageController extends GetxController {
   void initBoard(bool replay, {Board? board}) {
     if (replay) {
       board!.cleanBoard(board, numOfRows, numOfColumns);
-      minesDistribution(board);
+      Board.minesDistribution(board, numOfRows, numOfColumns, numOfMines);
       startTimer(board, true);
     } else {
       boards
           .add(Board.generateBoard(numOfRows, numOfColumns, boards.length + 1));
-      minesDistribution(boards.last);
+      Board.minesDistribution(boards.last, numOfRows, numOfColumns, numOfMines);
       startTimer(boards.last, false);
     }
     update();
@@ -56,26 +55,13 @@ class HomePageController extends GetxController {
     }
   }
 
-  void minesDistribution(Board board) {
-    int ctn = numOfMines;
-    while (ctn > 0) {
-      int x = random.nextInt(numOfRows - 1);
-      int j = random.nextInt(numOfColumns - 1);
-      if (!board.mines![x][j]) {
-        board.mines![x][j] = true;
-        ctn--;
-      }
-    }
-  }
-
   void onTapButton(int posX, int posY, Board board) {
     if (checkLose(board, x: posX, y: posY)) {
       return;
     }
     if (isEmptyCell(board, posX, posY)) {
       openCells(posX, posY, board);
-      board.xBackMoves!.add(posX);
-      board.yBackMoves!.add(posY);
+      fillBackMoves(board, posX, posY);
     }
     update();
   }
@@ -161,9 +147,7 @@ class HomePageController extends GetxController {
   }
 
   void backMove(Board board) {
-    if (!board.isLost! &&
-        board.numOfOpenedCells! > 0 &&
-        board.yBackMoves!.isNotEmpty) {
+    if (!board.isLost! && board.yBackMoves!.isNotEmpty) {
       if (board.cells![board.xBackMoves!.last][board.yBackMoves!.last] == 'f') {
         board.cells![board.xBackMoves!.last][board.yBackMoves!.last] = 'ff';
       } else {
@@ -174,9 +158,6 @@ class HomePageController extends GetxController {
       board.xBackMoves!.removeLast();
       board.yBackMoves!.removeLast();
     }
-    print(board.xForwardMoves);
-    print(board.xBackMoves);
-
     update();
   }
 
@@ -185,27 +166,11 @@ class HomePageController extends GetxController {
       if (board.cells![board.xForwardMoves!.last][board.yForwardMoves!.last] ==
           'ff') {
         setFlag(board, board.xForwardMoves!.last, board.yForwardMoves!.last);
-         board.xForwardMoves!.removeLast();
-      board.yForwardMoves!.removeLast();
       } else {
         openCells(board.xForwardMoves!.last, board.yForwardMoves!.last, board);
-        fillMovesList(
-            board, board.xForwardMoves!.last, board.yForwardMoves!.last,
-            fillForwardMoves: false);
+        fillBackMoves(
+            board, board.xForwardMoves!.last, board.yForwardMoves!.last);
       }
-    }
-    print(board.xForwardMoves);
-    print(board.xBackMoves);
-  }
-
-  fillMovesList(Board board, var valX, var valY,
-      {bool fillForwardMoves = true}) {
-    board.xBackMoves!.add(valX);
-    board.yBackMoves!.add(valY);
-    if (fillForwardMoves) {
-      board.xForwardMoves!.add(valX);
-      board.yForwardMoves!.add(valY);
-    } else {
       board.xForwardMoves!.removeLast();
       board.yForwardMoves!.removeLast();
     }
@@ -218,10 +183,14 @@ class HomePageController extends GetxController {
   setFlag(Board board, int posX, int posY) {
     if (isEmptyCell(board, posX, posY) && board.cells![posX][posY] != 'f') {
       board.cells![posX][posY] = "f";
-      board.xBackMoves!.add(posX);
-      board.yBackMoves!.add(posY);
+      fillBackMoves(board, posX, posY);
     }
     update();
+  }
+
+  fillBackMoves(Board board, posX, posY) {
+    board.xBackMoves!.add(posX);
+    board.yBackMoves!.add(posY);
   }
 
   bool isEmptyCell(Board board, int posX, int posY) {

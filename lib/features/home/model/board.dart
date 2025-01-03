@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class Board {
   List? cells, openedCells, mines;
   int? numOfOpenedCells;
@@ -81,9 +83,23 @@ class Board {
     board.isWin = false;
     board.isLost = false;
     board.numOfOpenedCells = 0;
-    board.xBackMoves=[];
-    board.yBackMoves=[];
-    board.xForwardMoves=[];
-    board.yForwardMoves=[];
+    board.xBackMoves = [];
+    board.yBackMoves = [];
+    board.xForwardMoves = [];
+    board.yForwardMoves = [];
+  }
+
+  static minesDistribution(
+      Board board, int numOfRows, int numOfColumns, int numOfMines) {
+    Random random = Random();
+    int ctn = numOfMines;
+    while (ctn > 0) {
+      int x = random.nextInt(numOfRows - 1);
+      int j = random.nextInt(numOfColumns - 1);
+      if (!board.mines![x][j]) {
+        board.mines![x][j] = true;
+        ctn--;
+      }
+    }
   }
 }

@@ -14,7 +14,7 @@ class TopBar extends StatelessWidget {
     return SafeArea(
       child: Container(
         width: Dimensions.screenWidth(context),
-        height: 80.h,
+        height: 70.h,
         alignment: Alignment.center,
         color: AppColors.darkGrey,
         child: Text(title, style: TextStyles.bold17(context)),
