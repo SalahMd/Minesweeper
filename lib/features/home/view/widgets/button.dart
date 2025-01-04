@@ -19,7 +19,7 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        controller.onTapButton(row, col,controller.boards[boardNum] );
+        controller.onTapButton(row, col,controller.boards[boardNum]);
       },
       onLongPress: () {
         controller.setFlag(controller.boards[boardNum], row, col);
@@ -31,24 +31,24 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               3.r,
             ),
-            border: controller.boards[boardNum].openedCells![row][col]
+            border: controller.boards[boardNum].openedCells[row][col]
                 ? Border.all(color: AppColors.blueColor, width: 2)
                 : null,
-            color: controller.boards[boardNum].mines![row][col] &&
-                    controller.boards[boardNum].isLost!
+            color: controller.boards[boardNum].mines[row][col] &&
+                    controller.boards[boardNum].isLost
                 ? AppColors.redColor
-                : controller.boards[boardNum].openedCells![row][col]
+                : controller.boards[boardNum].openedCells[row][col]
                     ? AppColors.greenColor
                     : AppColors.greyColor,
           ),
-          child: controller.boards[boardNum].mines![row][col] &&
-                  controller.boards[boardNum].isLost!
+          child: controller.boards[boardNum].mines[row][col] &&
+                  controller.boards[boardNum].isLost
               ? Image.asset(AppImages.mineImage)
-              : controller.boards[boardNum].cells![row][col] == "f"
+              : controller.boards[boardNum].cells[row][col] == "f"
                   ? Image.asset(AppImages.flag)
-                  : Text(controller.boards[boardNum].cells![row][col] != "f" &&
-                          controller.boards[boardNum].cells![row][col] != null &&controller.boards[boardNum].cells![row][col]!='ff'
-                      ? controller.boards[boardNum].cells![row][col].toString()
+                  : Text(controller.boards[boardNum].cells[row][col] != "f" &&
+                          controller.boards[boardNum].cells[row][col] != null &&controller.boards[boardNum].cells[row][col]!='ff'
+                      ? controller.boards[boardNum].cells[row][col].toString()
                       : '')),
     );
   }

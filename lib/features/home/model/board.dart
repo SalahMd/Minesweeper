@@ -1,15 +1,15 @@
 import 'dart:math';
 
 class Board {
-  List? cells, openedCells, mines;
-  int? numOfOpenedCells;
-  int? id;
+  List cells, openedCells, mines;
+  int numOfOpenedCells;
+  int id;
   int seconds;
-  bool? isLost;
-  bool? isWin;
-  List? backMoves;
-  List? forwardMoves;
-  List? flags;
+  bool isLost;
+  bool isWin;
+  List backMoves;
+  List forwardMoves;
+  List flags;
   Board(
       this.seconds,
       this.isLost,
@@ -88,8 +88,8 @@ class Board {
     while (ctn > 0) {
       int x = random.nextInt(numOfRows - 1);
       int j = random.nextInt(numOfColumns - 1);
-      if (!board.mines![x][j]) {
-        board.mines![x][j] = true;
+      if (!board.mines[x][j]) {
+        board.mines[x][j] = true;
         ctn--;
       }
     }

@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/colors.dart';
 
-Future<bool> animationedAlertWithActions(
-    var animation, String title, Function() onYesTap, BuildContext context,{IconData? icon=Icons.replay}) {
+Future<bool> animationedAlert(
+    var animation, String title, Function() onYesTap, BuildContext context,
+    {IconData? icon = Icons.replay}) {
   Get.defaultDialog(
       backgroundColor: AppColors.greyColor,
       title: title,
@@ -19,9 +20,11 @@ Future<bool> animationedAlertWithActions(
         GestureDetector(
             onTap: onYesTap,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Icon(icon,size: 25.sp,)
-            )),
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                child: Icon(
+                  icon,
+                  size: 25.sp,
+                ))),
       ]);
   return Future.value(true);
 }

@@ -36,7 +36,6 @@ class LoadBoard extends StatelessWidget {
                         controller
                             .loadBoard(controller.loadedBoardModels[index].id!);
                       },
-                      
                       id: controller.loadedBoardModels[index].id!,
                     );
                   }),

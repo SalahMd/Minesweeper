@@ -19,7 +19,7 @@ class GameServices {
     await sharedPref.setData('numOfSavedBoards', ctn);
     await sharedPref.setData('id${ctn.toString()}', ctn);
     await sharedPref.setData(
-        'numOfOpenedCells${ctn.toString()}', boards.numOfOpenedCells!);
+        'numOfOpenedCells${ctn.toString()}', boards.numOfOpenedCells);
     await sharedPref.setData(
         'cells${ctn.toString()}', json.encode(boards.cells));
     await sharedPref.setData(
@@ -28,12 +28,12 @@ class GameServices {
         'openedCells${ctn.toString()}', json.encode(boards.openedCells));
     await sharedPref.setData(
         'date${ctn.toString()}', DateTime.now().toString());
-    animationedAlertWithActions(AppAnimations.done, "Board is saved", () {
+    animationedAlert(AppAnimations.done, "Board is saved", () {
       Get.back();
     }, context, icon: Icons.arrow_back);
   }
 
-   loadBoard(int boardId) async {
+  loadBoard(int boardId) async {
     Board board = Board(
         0,
         false,
