@@ -16,7 +16,7 @@ class HomePageController extends GetxController {
   List<Board> boards = [];
   HomePageController({required this.context});
   @override
-  void onInit()async {
+  void onInit() async {
     if (await Get.arguments != null) {
       boards.add(await Get.arguments);
       startTimer(await Get.arguments, false);
@@ -61,7 +61,7 @@ class HomePageController extends GetxController {
     }
     if (isEmptyCell(board, posX, posY)) {
       openCells(posX, posY, board);
-      fillBackMoves(board, posX, posY);
+      board.backMoves!.add([posX, posY]);
     }
     update();
   }
@@ -147,32 +147,33 @@ class HomePageController extends GetxController {
   }
 
   void backMove(Board board) {
-    if (!board.isLost! && board.yBackMoves!.isNotEmpty) {
-      if (board.cells![board.xBackMoves!.last][board.yBackMoves!.last] == 'f') {
-        board.cells![board.xBackMoves!.last][board.yBackMoves!.last] = 'ff';
+    if (!board.isLost! && board.backMoves!.isNotEmpty) {
+      if (checkIfFlag(board)) {
+        board.cells![board.backMoves!.last.first][board.backMoves!.last.last] =
+            'ff';
       } else {
-        closeCells(board.xBackMoves!.last, board.yBackMoves!.last, board);
+        closeCells(
+            board.backMoves!.last.first, board.backMoves!.last.last, board);
       }
-      board.xForwardMoves!.add(board.xBackMoves!.last);
-      board.yForwardMoves!.add(board.yBackMoves!.last);
-      board.xBackMoves!.removeLast();
-      board.yBackMoves!.removeLast();
+      board.forwardMoves!
+          .add([board.backMoves!.last.first, board.backMoves!.last.last]);
+      board.backMoves!.removeLast();
     }
     update();
   }
 
   void forwardMove(Board board) {
-    if (board.xForwardMoves!.isNotEmpty) {
-      if (board.cells![board.xForwardMoves!.last][board.yForwardMoves!.last] ==
-          'ff') {
-        setFlag(board, board.xForwardMoves!.last, board.yForwardMoves!.last);
+    if (board.forwardMoves!.isNotEmpty) {
+      if (checkIfFlag(board)) {
+        setFlag(board, board.forwardMoves!.last.first,
+            board.forwardMoves!.last.last);
       } else {
-        openCells(board.xForwardMoves!.last, board.yForwardMoves!.last, board);
-        fillBackMoves(
-            board, board.xForwardMoves!.last, board.yForwardMoves!.last);
+        openCells(board.forwardMoves!.last.first, board.forwardMoves!.last.last,
+            board);
+        board.backMoves!.add(
+            [board.forwardMoves!.last.first, board.forwardMoves!.last.last]);
       }
-      board.xForwardMoves!.removeLast();
-      board.yForwardMoves!.removeLast();
+      board.forwardMoves!.removeLast();
     }
   }
 
@@ -183,17 +184,18 @@ class HomePageController extends GetxController {
   setFlag(Board board, int posX, int posY) {
     if (isEmptyCell(board, posX, posY) && board.cells![posX][posY] != 'f') {
       board.cells![posX][posY] = "f";
-      fillBackMoves(board, posX, posY);
+      board.backMoves!.add([posX, posY]);
     }
     update();
   }
 
-  fillBackMoves(Board board, posX, posY) {
-    board.xBackMoves!.add(posX);
-    board.yBackMoves!.add(posY);
-  }
-
   bool isEmptyCell(Board board, int posX, int posY) {
     return !board.openedCells![posX][posY] && !board.isLost! && !board.isWin!;
+  }
+
+  bool checkIfFlag(Board board) {
+    return board.cells![board.forwardMoves!.last.first]
+            [board.forwardMoves!.last.last] ==
+        'ff';
   }
 }

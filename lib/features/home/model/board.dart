@@ -7,19 +7,15 @@ class Board {
   int seconds;
   bool? isLost;
   bool? isWin;
-  List? xBackMoves;
-  List? yBackMoves;
-  List? xForwardMoves;
-  List? yForwardMoves;
+  List? backMoves;
+  List? forwardMoves;
   List? flags;
   Board(
       this.seconds,
       this.isLost,
       this.isWin,
-      this.xBackMoves,
-      this.yBackMoves,
-      this.xForwardMoves,
-      this.yForwardMoves,
+      this.backMoves,
+      this.forwardMoves,
       this.cells,
       this.openedCells,
       this.mines,
@@ -31,8 +27,6 @@ class Board {
         0,
         false,
         false,
-        [],
-        [],
         [],
         [],
         List<List>.generate(
@@ -83,10 +77,8 @@ class Board {
     board.isWin = false;
     board.isLost = false;
     board.numOfOpenedCells = 0;
-    board.xBackMoves = [];
-    board.yBackMoves = [];
-    board.xForwardMoves = [];
-    board.yForwardMoves = [];
+    board.backMoves = [];
+    board.forwardMoves = [];
   }
 
   static minesDistribution(

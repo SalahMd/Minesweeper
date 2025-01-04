@@ -40,8 +40,6 @@ class GameServices {
         false,
         [],
         [],
-        [],
-        [],
         json.decode(await sharedPref.getString("cells${boardId.toString()}")!),
         json.decode(
             await sharedPref.getString("openedCells${boardId.toString()}")!),
