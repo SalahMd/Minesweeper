@@ -93,6 +93,6 @@ class Timer extends StatelessWidget {
           )
         ],
       ),
-    ).animate().fade(duration: 700.ms, delay: 300.ms).slideY(begin: 0.3);
+    ).animate().fade(duration: 700.ms, delay: 300.ms).slideX(begin: -0.3);
   }
 }

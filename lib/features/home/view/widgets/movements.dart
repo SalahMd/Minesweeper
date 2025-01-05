@@ -38,7 +38,7 @@ class Movements extends StatelessWidget {
                 color: AppColors.greyColor,
               ),
             ),
-          ),
+          ).animate().fade(duration: 700.ms, delay: 700.ms).slideX(begin: -0.3),
           GestureDetector(
             onTap: onSaveBoard,
             child: Container(
@@ -55,7 +55,7 @@ class Movements extends StatelessWidget {
                 color: AppColors.greyColor,
               ),
             ),
-          ),
+          ).animate().fade(duration: 700.ms, delay: 700.ms).slideY(begin: 0.7),
           GestureDetector(
             onTap: onForwardMove,
             child: Container(
@@ -72,9 +72,9 @@ class Movements extends StatelessWidget {
                 color: AppColors.greyColor,
               ),
             ),
-          ),
+          ).animate().fade(duration: 700.ms, delay: 700.ms).slideX(begin: 0.3),
         ],
       ),
-    ).animate().fade(duration: 700.ms, delay: 700.ms).slideY(begin: 0.7);
+    );
   }
 }

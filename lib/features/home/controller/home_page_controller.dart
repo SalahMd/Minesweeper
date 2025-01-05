@@ -28,12 +28,13 @@ class HomePageController extends GetxController {
   void initBoard(bool replay, {Board? board}) {
     if (replay) {
       board!.cleanBoard(board, numOfRows, numOfColumns);
-      Board.minesDistribution(board, numOfRows, numOfColumns, numOfMines);
+      board.minesDistribution(board, numOfRows, numOfColumns, numOfMines);
       startTimer(board, true);
     } else {
       boards
           .add(Board.generateBoard(numOfRows, numOfColumns, boards.length + 1));
-      Board.minesDistribution(boards.last, numOfRows, numOfColumns, numOfMines);
+      boards.last
+          .minesDistribution(boards.last, numOfRows, numOfColumns, numOfMines);
       startTimer(boards.last, false);
     }
     update();
@@ -43,7 +44,7 @@ class HomePageController extends GetxController {
     if (!replay) {
       timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
         if (!board.isLost && !board.isWin) {
-          if (board.seconds == 200) {
+          if (board.seconds == 250) {
             checkLose(board, isTimed: true);
           }
           board.seconds++;
@@ -59,7 +60,7 @@ class HomePageController extends GetxController {
     }
     if (isEmptyCell(board, posX, posY)) {
       openCells(posX, posY, board);
-      board.backMoves.add([posX, posY]);
+      board.backwardMoves.add([posX, posY]);
       update();
     }
   }
@@ -130,7 +131,7 @@ class HomePageController extends GetxController {
   }
 
   bool checkWin(Board board) {
-    if (board.numOfOpenedCells == numOfCells - numOfMines || numOfMines == 0) {
+    if (board.numOfOpenedCells == numOfCells - numOfMines) {
       board.isWin = true;
       animationedAlert(AppAnimations.win, 'You won', () {
         initBoard(true, board: board);
@@ -143,17 +144,17 @@ class HomePageController extends GetxController {
   }
 
   void backMove(Board board) {
-    if (!board.isLost && board.backMoves.isNotEmpty) {
+    if (!board.isLost && board.backwardMoves.isNotEmpty) {
       if (checkIfFlag(board, true)) {
-        board.cells[board.backMoves.last.first][board.backMoves.last.last] =
-            'ff';
+        board.cells[board.backwardMoves.last.first]
+            [board.backwardMoves.last.last] = 'ff';
       } else {
-        closeCells(
-            board.backMoves.last.first, board.backMoves.last.last, board);
+        closeCells(board.backwardMoves.last.first,
+            board.backwardMoves.last.last, board);
       }
       board.forwardMoves
-          .add([board.backMoves.last.first, board.backMoves.last.last]);
-      board.backMoves.removeLast();
+          .add([board.backwardMoves.last.first, board.backwardMoves.last.last]);
+      board.backwardMoves.removeLast();
     }
     update();
   }
@@ -166,7 +167,7 @@ class HomePageController extends GetxController {
       } else {
         openCells(
             board.forwardMoves.last.first, board.forwardMoves.last.last, board);
-        board.backMoves
+        board.backwardMoves
             .add([board.forwardMoves.last.first, board.forwardMoves.last.last]);
       }
       board.forwardMoves.removeLast();
@@ -180,7 +181,7 @@ class HomePageController extends GetxController {
   void setFlag(Board board, int posX, int posY) {
     if (isEmptyCell(board, posX, posY) && board.cells[posX][posY] != 'f') {
       board.cells[posX][posY] = "f";
-      board.backMoves.add([posX, posY]);
+      board.backwardMoves.add([posX, posY]);
     }
     update();
   }
@@ -195,8 +196,8 @@ class HomePageController extends GetxController {
               [board.forwardMoves.last.last] ==
           'ff';
     } else {
-      return board.cells[board.backMoves.last.first]
-              [board.backMoves.last.last] ==
+      return board.cells[board.backwardMoves.last.first]
+              [board.backwardMoves.last.last] ==
           'f';
     }
   }

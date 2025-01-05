@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/colors.dart';
+import 'package:untitled/core/themes/text_styles.dart';
 
 Future<bool> animationedAlert(
     var animation, String title, Function() onYesTap, BuildContext context,
@@ -9,7 +10,7 @@ Future<bool> animationedAlert(
   Get.defaultDialog(
       backgroundColor: AppColors.greyColor,
       title: title,
-      titleStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
+      titleStyle: TextStyles.w40014(context),
       titlePadding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 10.w),
       content: animation != null
           ? Container(

@@ -7,14 +7,14 @@ class Board {
   int seconds;
   bool isLost;
   bool isWin;
-  List backMoves;
+  List backwardMoves;
   List forwardMoves;
   List flags;
   Board(
       this.seconds,
       this.isLost,
       this.isWin,
-      this.backMoves,
+      this.backwardMoves,
       this.forwardMoves,
       this.cells,
       this.openedCells,
@@ -77,11 +77,11 @@ class Board {
     board.isWin = false;
     board.isLost = false;
     board.numOfOpenedCells = 0;
-    board.backMoves = [];
+    board.backwardMoves = [];
     board.forwardMoves = [];
   }
 
-  static minesDistribution(
+  minesDistribution(
       Board board, int numOfRows, int numOfColumns, int numOfMines) {
     Random random = Random();
     int ctn = numOfMines;

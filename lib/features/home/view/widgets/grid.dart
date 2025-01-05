@@ -14,7 +14,8 @@ class Grid extends StatelessWidget {
       {super.key,
       required this.numOfCells,
       required this.controller,
-      required this.numOfColumns, required this.boardNum});
+      required this.numOfColumns,
+      required this.boardNum});
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +38,12 @@ class Grid extends StatelessWidget {
                   return Button(
                     row: x,
                     col: y,
-                    controller: controller, boardNum: boardNum,
+                    controller: controller,
+                    board: controller.boards[boardNum],
                   );
                 }))
         .animate()
         .fade(duration: 700.ms, delay: 500.ms)
-        .slideY(begin: 0.4);
+        .slideY(begin: 0.3);
   }
 }

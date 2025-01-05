@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/core/themes/text_styles.dart';
@@ -26,6 +27,6 @@ class NewBoard extends StatelessWidget {
           style: TextStyles.w50014White(context),
         ),
       ),
-    ));
+    )).animate().fade(duration: 700.ms, delay: 700.ms).slideY(begin: 0.7);
   }
 }

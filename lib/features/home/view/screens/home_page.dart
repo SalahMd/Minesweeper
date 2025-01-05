@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:untitled/core/constants/colors.dart';
 import 'package:untitled/features/home/controller/home_page_controller.dart';
 import 'package:untitled/features/home/view/widgets/board.dart';
 import 'package:untitled/features/home/view/widgets/top_bar.dart';
@@ -11,7 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(HomePageController(context: context));
     return Scaffold(
-      backgroundColor: Colors.grey,
+      backgroundColor: AppColors.greyColor,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -24,10 +25,10 @@ class HomePage extends StatelessWidget {
                     itemCount: controller.boards.length,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemBuilder: (context, i) {
+                    itemBuilder: (BuildContext context, int index) {
                       return Board(
                         controller: controller,
-                        boardNum: i,
+                        boardNum: index,
                       );
                     })),
           ],
