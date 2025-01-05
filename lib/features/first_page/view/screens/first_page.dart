@@ -32,7 +32,7 @@ class FirstPage extends StatelessWidget {
               Center(
                   child: SafeArea(
                       child: Text(
-                'Mineswweper',
+                'Minesweeper',
                 style: TextStyles.bold25(context),
               ))),
               SizedBox(

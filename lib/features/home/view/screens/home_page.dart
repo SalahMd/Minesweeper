@@ -20,17 +20,19 @@ class HomePage extends StatelessWidget {
               title: "Minesweeper",
             ),
             GetBuilder<HomePageController>(
-                builder: (controller) => ListView.builder(
-                    padding: EdgeInsets.zero,
-                    itemCount: controller.boards.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Board(
-                        controller: controller,
-                        boardNum: index,
-                      );
-                    })),
+              builder: (controller) => ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: controller.boards.length,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (BuildContext context, int index) {
+                  return Board(
+                    controller: controller,
+                    boardNum: index,
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

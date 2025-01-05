@@ -12,6 +12,7 @@ class HomePageController extends GetxController {
   final BuildContext context;
   GameServices gameServices = GameServices();
   List<Board> boards = [];
+  Board? currentBoard;
   HomePageController({required this.context});
   @override
   void onInit() async {
@@ -44,8 +45,8 @@ class HomePageController extends GetxController {
     if (!replay) {
       timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
         if (!board.isLost && !board.isWin) {
-          if (board.seconds == 250) {
-            checkLose(board, isTimed: true);
+          if (board.seconds == 300) {
+            checkLose(isTimed: true);
           }
           board.seconds++;
           update();
@@ -55,10 +56,11 @@ class HomePageController extends GetxController {
   }
 
   void onTapButton(int posX, int posY, Board board) {
-    if (checkLose(board, x: posX, y: posY)) {
+    currentBoard = board;
+    if (checkLose(x: posX, y: posY)) {
       return;
     }
-    if (isEmptyCell(board, posX, posY)) {
+    if (isEmptyCell(posX, posY)) {
       openCells(posX, posY, board);
       board.backwardMoves.add([posX, posY]);
       update();
@@ -89,7 +91,7 @@ class HomePageController extends GetxController {
           int count = countMines(i, j, board);
           if (count == 0) {
             openCells(i, j, board);
-          } else if (count != 0) {
+          } else {
             board.cells[i][j] = count;
           }
           board.numOfOpenedCells++;
@@ -107,7 +109,7 @@ class HomePageController extends GetxController {
           int count = countMines(i, j, board);
           if (count == 0) {
             closeCells(i, j, board);
-          } else if (count != 0) {
+          } else {
             board.cells[i][j] = null;
           }
           board.numOfOpenedCells--;
@@ -117,11 +119,11 @@ class HomePageController extends GetxController {
     update();
   }
 
-  bool checkLose(Board board, {int x = 0, int y = 0, bool isTimed = false}) {
-    if (board.mines[x][y] || isTimed) {
-      board.isLost = true;
+  bool checkLose({int x = 0, int y = 0, bool isTimed = false}) {
+    if (currentBoard!.mines[x][y] || isTimed) {
+      currentBoard!.isLost = true;
       animationedAlert(AppAnimations.lose, 'You lost', () {
-        initBoard(true, board: board);
+        initBoard(true, board: currentBoard);
         Get.back();
       }, context);
       update();
@@ -145,15 +147,14 @@ class HomePageController extends GetxController {
 
   void backMove(Board board) {
     if (!board.isLost && board.backwardMoves.isNotEmpty) {
-      if (checkIfFlag(board, true)) {
-        board.cells[board.backwardMoves.last.first]
-            [board.backwardMoves.last.last] = 'ff';
+      int first = board.backwardMoves.last.first;
+      int last = board.backwardMoves.last.last;
+      if (board.cells[first][last] == 'f') {
+        board.cells[first][last] = 'ff';
       } else {
-        closeCells(board.backwardMoves.last.first,
-            board.backwardMoves.last.last, board);
+        closeCells(first, last, board);
       }
-      board.forwardMoves
-          .add([board.backwardMoves.last.first, board.backwardMoves.last.last]);
+      board.forwardMoves.add([first, last]);
       board.backwardMoves.removeLast();
     }
     update();
@@ -161,14 +162,13 @@ class HomePageController extends GetxController {
 
   void forwardMove(Board board) {
     if (board.forwardMoves.isNotEmpty) {
-      if (checkIfFlag(board, false)) {
-        setFlag(
-            board, board.forwardMoves.last.first, board.forwardMoves.last.last);
+      int first = board.forwardMoves.last.first;
+      int last = board.forwardMoves.last.last;
+      if (board.cells[first][last] == 'ff') {
+        setFlag(board, first, last);
       } else {
-        openCells(
-            board.forwardMoves.last.first, board.forwardMoves.last.last, board);
-        board.backwardMoves
-            .add([board.forwardMoves.last.first, board.forwardMoves.last.last]);
+        openCells(first, last, board);
+        board.backwardMoves.add([first, last]);
       }
       board.forwardMoves.removeLast();
     }
@@ -179,26 +179,14 @@ class HomePageController extends GetxController {
   }
 
   void setFlag(Board board, int posX, int posY) {
-    if (isEmptyCell(board, posX, posY) && board.cells[posX][posY] != 'f') {
+    if (isEmptyCell( posX, posY) && board.cells[posX][posY] != 'f') {
       board.cells[posX][posY] = "f";
       board.backwardMoves.add([posX, posY]);
     }
     update();
   }
 
-  bool isEmptyCell(Board board, int posX, int posY) {
-    return !board.openedCells[posX][posY] && !board.isLost && !board.isWin;
-  }
-
-  bool checkIfFlag(Board board, bool backMove) {
-    if (!backMove) {
-      return board.cells[board.forwardMoves.last.first]
-              [board.forwardMoves.last.last] ==
-          'ff';
-    } else {
-      return board.cells[board.backwardMoves.last.first]
-              [board.backwardMoves.last.last] ==
-          'f';
-    }
+  bool isEmptyCell( int posX, int posY) {
+    return !currentBoard!.openedCells[posX][posY] && !currentBoard!.isLost && !currentBoard!.isWin;
   }
 }

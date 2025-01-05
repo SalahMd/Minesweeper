@@ -44,6 +44,7 @@ class Grid extends StatelessWidget {
                 }))
         .animate()
         .fade(duration: 700.ms, delay: 500.ms)
-        .slideY(begin: 0.3);
+        .fadeIn()
+        .scale(begin: const Offset(0.9, 0.9));
   }
 }
