@@ -25,9 +25,14 @@ class GameServices {
     await sharedPref.setData(
         'mines${ctn.toString()}', json.encode(boards.mines));
     await sharedPref.setData(
+        'backwardMoves${ctn.toString()}', json.encode(boards.backwardMoves));
+    await sharedPref.setData(
+        'forwardMoves${ctn.toString()}', json.encode(boards.forwardMoves));
+    await sharedPref.setData(
         'openedCells${ctn.toString()}', json.encode(boards.openedCells));
     await sharedPref.setData(
         'date${ctn.toString()}', DateTime.now().toString());
+
     animationedAlert(AppAnimations.done, "Board is saved", () {
       Get.back();
     }, context, icon: Icons.arrow_back);
@@ -38,8 +43,10 @@ class GameServices {
         0,
         false,
         false,
-        [],
-        [],
+        json.decode(
+            await sharedPref.getString("backwardMoves${boardId.toString()}")!),
+        json.decode(
+            await sharedPref.getString("forwardMoves${boardId.toString()}")!),
         json.decode(await sharedPref.getString("cells${boardId.toString()}")!),
         json.decode(
             await sharedPref.getString("openedCells${boardId.toString()}")!),

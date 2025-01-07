@@ -32,12 +32,12 @@ class Button extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               3.r,
             ),
-            border: board.openedCells[row][col]
+            border: board.openedCells[row][col].first
                 ? Border.all(color: AppColors.blueColor, width: 2)
                 : null,
             color: board.mines[row][col] && board.isLost
                 ? AppColors.redColor
-                : board.openedCells[row][col]
+                : board.openedCells[row][col].first
                     ? AppColors.greenColor
                     : AppColors.greyColor,
           ),

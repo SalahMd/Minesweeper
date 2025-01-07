@@ -39,7 +39,7 @@ class Board {
             numOfRows,
             (i) => List<dynamic>.generate(
                   numOfColumns,
-                  (index) => false,
+                  (index) => [false,0],
                 )),
         List<List>.generate(
             numOfRows,
@@ -64,7 +64,7 @@ class Board {
         numOfRows,
         (i) => List<dynamic>.generate(
               numOfColumns,
-              (index) => false,
+              (index) => [false,backwardMoves.length],
             ));
     board.cells = List<List>.generate(
         numOfRows,

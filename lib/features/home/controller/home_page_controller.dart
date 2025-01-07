@@ -12,7 +12,6 @@ class HomePageController extends GetxController {
   final BuildContext context;
   GameServices gameServices = GameServices();
   List<Board> boards = [];
-  Board? currentBoard;
   HomePageController({required this.context});
   @override
   void onInit() async {
@@ -46,7 +45,7 @@ class HomePageController extends GetxController {
       timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
         if (!board.isLost && !board.isWin) {
           if (board.seconds == 300) {
-            checkLose(isTimed: true);
+            checkLose(board, isTimed: true);
           }
           board.seconds++;
           update();
@@ -56,13 +55,14 @@ class HomePageController extends GetxController {
   }
 
   void onTapButton(int posX, int posY, Board board) {
-    currentBoard = board;
-    if (checkLose(x: posX, y: posY)) {
+    if (checkLose(board, x: posX, y: posY)) {
       return;
     }
-    if (isEmptyCell(posX, posY)) {
-      openCells(posX, posY, board);
+    if (isEmptyCell(board, posX, posY)) {
       board.backwardMoves.add([posX, posY]);
+
+      openCells(posX, posY, board);
+
       update();
     }
   }
@@ -86,8 +86,10 @@ class HomePageController extends GetxController {
   void openCells(int x, int y, Board board) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (validCell(i, j) && !board.openedCells[i][j] && !board.mines[i][j]) {
-          board.openedCells[i][j] = true;
+        if (validCell(i, j) &&
+            !board.openedCells[i][j].first &&
+            !board.mines[i][j]) {
+          board.openedCells[i][j] = [true, board.backwardMoves.length];
           int count = countMines(i, j, board);
           if (count == 0) {
             openCells(i, j, board);
@@ -101,29 +103,29 @@ class HomePageController extends GetxController {
     checkWin(board);
   }
 
-  void closeCells(int x, int y, Board board) {
-    for (int i = x - 1; i <= x + 1; i++) {
-      for (int j = y - 1; j <= y + 1; j++) {
-        if (validCell(i, j) && board.openedCells[i][j]) {
-          board.openedCells[i][j] = false;
-          int count = countMines(i, j, board);
-          if (count == 0) {
-            closeCells(i, j, board);
-          } else {
-            board.cells[i][j] = null;
-          }
+  void closeCells(
+    Board board,
+  ) {
+    for (int j = 0; j < numOfRows; j++) {
+      for (int i = 0; i < numOfColumns; i++) {
+        if (board.openedCells[j][i].last == board.backwardMoves.length &&
+            board.openedCells[j][i].first) {
           board.numOfOpenedCells--;
+          board.cells[j][i] = null;
+          board.openedCells[j][i].first = false;
+          board.openedCells[j][i].last = 0;
         }
       }
     }
+
     update();
   }
 
-  bool checkLose({int x = 0, int y = 0, bool isTimed = false}) {
-    if (currentBoard!.mines[x][y] || isTimed) {
-      currentBoard!.isLost = true;
+  bool checkLose(Board board, {int x = 0, int y = 0, bool isTimed = false}) {
+    if (board.mines[x][y] || isTimed) {
+      board.isLost = true;
       animationedAlert(AppAnimations.lose, 'You lost', () {
-        initBoard(true, board: currentBoard);
+        initBoard(true, board: board);
         Get.back();
       }, context);
       update();
@@ -152,7 +154,7 @@ class HomePageController extends GetxController {
       if (board.cells[first][last] == 'f') {
         board.cells[first][last] = 'ff';
       } else {
-        closeCells(first, last, board);
+        closeCells(board);
       }
       board.forwardMoves.add([first, last]);
       board.backwardMoves.removeLast();
@@ -179,14 +181,16 @@ class HomePageController extends GetxController {
   }
 
   void setFlag(Board board, int posX, int posY) {
-    if (isEmptyCell( posX, posY) && board.cells[posX][posY] != 'f') {
+    if (isEmptyCell(board, posX, posY) && board.cells[posX][posY] != 'f') {
       board.cells[posX][posY] = "f";
       board.backwardMoves.add([posX, posY]);
     }
     update();
   }
 
-  bool isEmptyCell( int posX, int posY) {
-    return !currentBoard!.openedCells[posX][posY] && !currentBoard!.isLost && !currentBoard!.isWin;
+  bool isEmptyCell(Board board, int posX, int posY) {
+    return !board.openedCells[posX][posY].first &&
+        !board.isLost &&
+        !board.isWin;
   }
 }
