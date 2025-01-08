@@ -37,7 +37,7 @@ class Cells {
         }
       }
     }
-    board.checkWin(board, ctx);
+      board.checkWin(board, ctx);
   }
 
   int countMines(int x, int y, Board board) {

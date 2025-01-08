@@ -7,12 +7,13 @@ import 'package:untitled/features/first_page/view/screens/first_page.dart';
 import 'package:untitled/features/home/view/screens/home_page.dart';
 import 'package:untitled/features/load_board/view/screens/load_board.dart';
 
-void main() async {
+void main(List <String> args)  async{
   WidgetsFlutterBinding.ensureInitialized();
   await initialServices();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

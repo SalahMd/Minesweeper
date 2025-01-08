@@ -7,6 +7,7 @@ import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/features/home/data/cells.dart';
 
 class Board {
+  int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
   List cells, openedCells, mines;
   int numOfOpenedCells;
   int id;
@@ -28,36 +29,35 @@ class Board {
       this.mines,
       this.numOfOpenedCells,
       this.id,
-      this.flags,this.cell);
-  static generateBoard(int numOfRows, int numOfColumns, int numOfBoards) {
-    Board board = Board(
-        0,
-        false,
-        false,
-        [],
-        [],
-        List<List>.generate(
-            numOfRows,
-            (i) => List<dynamic>.generate(
-                  numOfColumns,
-                  (index) => null,
-                )),
-        List<List>.generate(
-            numOfRows,
-            (i) => List<dynamic>.generate(
-                  numOfColumns,
-                  (index) => [false, 0],
-                )),
-        List<List>.generate(
-            numOfRows,
-            (i) => List<dynamic>.generate(
-                  numOfColumns,
-                  (index) => false,
-                )),
-        0,
-        numOfBoards,
-        [],Cells(numOfRows: 9, numOfColumns: 8));
-    return board;
+      this.flags,
+      this.cell);
+
+  Board.generateBoard({
+    required int numOfBoards,
+    required this.numOfRows,
+    required this.numOfColumns,
+    required this.numOfCells,
+  })  : seconds = 0,
+        isLost = false,
+        isWin = false,
+        backwardMoves = [],
+        forwardMoves = [],
+        cells = generateList(null, numOfRows, numOfColumns),
+        openedCells = generateList([false, 0], numOfRows, numOfColumns),
+        mines = generateList(false, numOfRows, numOfColumns),
+        numOfOpenedCells = 0,
+        id = numOfBoards,
+        flags = [],
+        cell = Cells(numOfRows: numOfRows, numOfColumns: numOfColumns);
+
+  static List generateList(var val, int numOfRows, int numOfColumns) {
+    return List<List>.generate(
+      numOfRows,
+      (i) => List<dynamic>.generate(
+        numOfColumns,
+        (index) => val,
+      ),
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -89,12 +89,11 @@ class Board {
       json['flags'],
       json['isWin'],
       json['isLost'],
-      json['cell']
-
+      json['cell'],
     );
   }
 
-  cleanBoard(Board board, int numOfRows, int numOfColumns) {
+  cleanBoard(Board board) {
     board.mines = List<List>.generate(
         numOfRows,
         (i) => List<dynamic>.generate(
@@ -123,7 +122,8 @@ class Board {
   }
 
   minesDistribution(
-      Board board, int numOfRows, int numOfColumns, int numOfMines) {
+    Board board,
+  ) {
     Random random = Random();
     int ctn = numOfMines;
     while (ctn > 0) {
@@ -136,13 +136,12 @@ class Board {
     }
   }
 
-  static bool checkLose(Board board, BuildContext ctx,
+  bool checkLose(Board board, BuildContext ctx,
       {int x = 0, int y = 0, bool isTimed = false}) {
     if (board.mines[x][y] || isTimed) {
       board.isLost = true;
       animationedAlert(AppAnimations.lose, 'You lost', () {
-        board.cleanBoard(board, 9, 8);
-        board.minesDistribution(board, 9, 8, 10);
+        replay(board);
         Get.back();
       }, ctx);
       return true;
@@ -150,12 +149,11 @@ class Board {
     return false;
   }
 
-   bool checkWin(Board board, BuildContext ctx) {
-    if (board.numOfOpenedCells == 72 - 10) {
+  bool checkWin(Board board, BuildContext ctx) {
+    if (board.numOfOpenedCells == numOfCells - numOfMines) {
       board.isWin = true;
       animationedAlert(AppAnimations.win, 'You won', () {
-        board.cleanBoard(board, 9, 8);
-        board.minesDistribution(board, 9, 8, 10);
+        replay(board);
         Get.back();
       }, ctx);
       return true;
@@ -163,7 +161,12 @@ class Board {
     return false;
   }
 
-  void forwardMove(Board board,BuildContext ctx) {
+  void replay(Board board) {
+    board.cleanBoard(board);
+    board.minesDistribution(board);
+  }
+
+  void forwardMove(Board board, BuildContext ctx) {
     if (board.forwardMoves.isNotEmpty) {
       int first = board.forwardMoves.last.first;
       int last = board.forwardMoves.last.last;
@@ -171,12 +174,13 @@ class Board {
         cell.setFlag(board, first, last);
       } else {
         board.backwardMoves.add([first, last]);
-        cell.openCells(first, last, board,ctx);
-        checkWin(board,ctx);
+        cell.openCells(first, last, board, ctx);
+        checkWin(board, ctx);
       }
       board.forwardMoves.removeLast();
     }
   }
+
   void backMove(Board board) {
     if (!board.isLost && board.backwardMoves.isNotEmpty) {
       int first = board.backwardMoves.last.first;
@@ -188,6 +192,17 @@ class Board {
       }
       board.forwardMoves.add([first, last]);
       board.backwardMoves.removeLast();
+    }
+  }
+
+  setFlag(Board board, int posX, int posY) {
+    cell.setFlag(board, posX, posY);
+  }
+
+  openCells(Board board, int posX, int posY, {BuildContext? ctx}) {
+    if (cell.isEmpty(board, posX, posY)) {
+      board.backwardMoves.add([posX, posY]);
+      cell.openCells(posX, posY, board, ctx!);
     }
   }
 }
