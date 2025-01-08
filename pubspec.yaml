@@ -12,6 +12,7 @@ dependencies:
   lottie: ^2.6.0
   flutter_animate: ^4.2.0
   get: ^4.6.6
+  logger: ^2.5.0
   shared_preferences: ^2.3.3
   jiffy: ^6.3.2
   flutter_launcher_icons: ^0.13.1

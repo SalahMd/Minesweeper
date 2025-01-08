@@ -44,7 +44,7 @@ class LoadBoardWidget extends StatelessWidget {
                   height: 5.h,
                 ),
                 Text(Jiffy.parse(date)
-                    .format(pattern: 'y/MMM/EE   h:m')
+                    .format(pattern: 'y/MMM/EE  h:m')
                     .toString())
               ],
             ),

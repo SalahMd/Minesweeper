@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/core/helpers/shared_pref_helper.dart';
-import 'package:untitled/features/home/model/board.dart';
+import 'package:untitled/features/home/data/board.dart';
+import 'package:untitled/features/home/data/cells.dart';
 
 class GameServices {
   SharedPrefHelper sharedPref = SharedPrefHelper();
@@ -53,7 +54,7 @@ class GameServices {
         json.decode(await sharedPref.getString("mines${boardId.toString()}")!),
         await sharedPref.getInt("numOfOpenedCells${boardId.toString()}")!,
         await sharedPref.getInt("id${boardId.toString()}")!,
-        []);
+        [],Cells(numOfRows: 9, numOfColumns: 8));
     return board;
   }
 }

@@ -34,7 +34,7 @@ class Movements extends StatelessWidget {
                   border: Border.all(color: AppColors.blueColor)),
               child: Icon(
                 Icons.arrow_back,
-                size: 30.sp,
+                size: 25.sp,
                 color: AppColors.greyColor,
               ),
             ),
@@ -51,7 +51,7 @@ class Movements extends StatelessWidget {
                   border: Border.all(color: AppColors.blueColor)),
               child: Icon(
                 Icons.save,
-                size: 30.sp,
+                size: 25.sp,
                 color: AppColors.greyColor,
               ),
             ),
@@ -68,7 +68,7 @@ class Movements extends StatelessWidget {
                   border: Border.all(color: AppColors.blueColor)),
               child: Icon(
                 Icons.arrow_forward,
-                size: 30.sp,
+                size: 25.sp,
                 color: AppColors.greyColor,
               ),
             ),

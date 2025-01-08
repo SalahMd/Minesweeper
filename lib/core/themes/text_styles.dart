@@ -11,6 +11,8 @@ class TextStyles {
       color: Colors.red[700], fontSize: 18.sp, fontWeight: FontWeight.w500);
   static TextStyle w40014(BuildContext context) =>
       TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500);
+      static TextStyle w40012(BuildContext context) =>
+      TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w400);
   static TextStyle w50014White(BuildContext context) => TextStyle(
       fontSize: 14.sp,
       fontWeight: FontWeight.w500,
