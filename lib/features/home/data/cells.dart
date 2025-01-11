@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/core/helpers/looper.dart';
 import 'package:untitled/features/home/data/board.dart';
 
 class Cells {
@@ -7,17 +8,15 @@ class Cells {
   Cells({required this.numOfRows, required this.numOfColumns});
 
   void closeCells(Board board) {
-    for (int j = 0; j < numOfRows; j++) {
-      for (int i = 0; i < numOfColumns; i++) {
-        if (board.openedCells[j][i].last == board.backwardMoves.length &&
-            board.openedCells[j][i].first) {
-          board.cells[j][i] = null;
-          board.openedCells[j][i].first = false;
-          board.openedCells[j][i].last = 0;
-          board.numOfOpenedCells--;
-        }
+    looper(numOfRows, numOfColumns, (j, i) {
+      if (board.openedCells[j][i].last == board.backwardMoves.length &&
+          board.openedCells[j][i].first) {
+        board.cells[j][i] = null;
+        board.openedCells[j][i].first = false;
+        board.openedCells[j][i].last = 0;
+        board.numOfOpenedCells--;
       }
-    }
+    });
   }
 
   void openCells(int x, int y, Board board, BuildContext ctx) {
@@ -37,7 +36,7 @@ class Cells {
         }
       }
     }
-      board.checkWin(board, ctx);
+    board.checkWin(board, ctx);
   }
 
   int countMines(int x, int y, Board board) {

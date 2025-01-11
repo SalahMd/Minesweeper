@@ -91,5 +91,5 @@ class HomePageController extends GetxController {
   }
 
   Board getBoard(int boardId) => game.boards[boardId];
-  int getBoardsLenght() => game.boards.length;
+  int get getBoardsLenght => game.boards.length;
 }

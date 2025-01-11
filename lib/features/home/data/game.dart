@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:untitled/core/services/game_services.dart';
-
 import 'board.dart';
 
 class Game {
@@ -10,7 +9,7 @@ class Game {
     return boards[boardId];
   }
 
-  addBoard({Board? board}) {
+  void addBoard({Board? board}) {
     if (board != null) {
       boards.add(board);
     } else {
@@ -30,6 +29,4 @@ class Game {
   void save(int boardId, BuildContext ctx) {
     gameServices.saveBoard(getBoard(boardId), ctx);
   }
-
-
 }

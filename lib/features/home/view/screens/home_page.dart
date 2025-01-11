@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
             GetBuilder<HomePageController>(
               builder: (controller) => ListView.builder(
                 padding: EdgeInsets.zero,
-                itemCount: controller.getBoardsLenght(),
+                itemCount: controller.getBoardsLenght,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (BuildContext context, int index) {

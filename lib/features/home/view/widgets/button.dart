@@ -20,6 +20,7 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onDoubleTapDown: (c){},
       onTap: () {
         controller.onTapButton(row, col, board);
       },
