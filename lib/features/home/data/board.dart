@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
+import 'package:untitled/core/helpers/stack.dart';
 import 'package:untitled/features/home/data/cells.dart';
 
 class Board {
@@ -13,8 +14,8 @@ class Board {
   int seconds;
   bool isLost;
   bool isWin;
-  List backwardMoves;
-  List forwardMoves;
+  MyStack backwardMoves;
+  MyStack forwardMoves;
   List flags;
   Cells cell;
   Board(
@@ -36,8 +37,8 @@ class Board {
   })  : seconds = 0,
         isLost = false,
         isWin = false,
-        backwardMoves = [],
-        forwardMoves = [],
+        backwardMoves =MyStack(),
+        forwardMoves =MyStack(),
         cells = generateList(null),
         openedCells = generateList([false, 0]),
         mines = generateList(false),
@@ -64,8 +65,8 @@ class Board {
     board.isWin = false;
     board.isLost = false;
     board.numOfOpenedCells = 0;
-    board.backwardMoves = [];
-    board.forwardMoves = [];
+    board.backwardMoves.clear();
+    board.forwardMoves .clear();
   }
 
   minesDistribution(Board board) {
@@ -113,30 +114,30 @@ class Board {
 
   void forwardMove(Board board, BuildContext ctx) {
     if (board.forwardMoves.isNotEmpty) {
-      int first = board.forwardMoves.last.first;
-      int last = board.forwardMoves.last.last;
+      int first = board.forwardMoves.peek.first;
+      int last = board.forwardMoves.peek.last;
       if (board.cells[first][last] == 'ff') {
         cell.setFlag(board, first, last);
       } else {
-        board.backwardMoves.add([first, last]);
+        board.backwardMoves.push([first, last]);
         cell.openCells(first, last, board, ctx);
         checkWin(board, ctx);
       }
-      board.forwardMoves.removeLast();
+      board.forwardMoves.pop();
     }
   }
 
   void backMove(Board board) {
     if (!board.isLost && board.backwardMoves.isNotEmpty) {
-      int first = board.backwardMoves.last.first;
-      int last = board.backwardMoves.last.last;
+      int first = board.backwardMoves.peek.first;
+      int last = board.backwardMoves.peek.last;
       if (board.cells[first][last] == 'f') {
         board.cells[first][last] = 'ff';
       } else {
         cell.closeCells(board);
       }
-      board.forwardMoves.add([first, last]);
-      board.backwardMoves.removeLast();
+      board.forwardMoves.push([first, last]);
+      board.backwardMoves.pop();
     }
   }
 
@@ -146,7 +147,7 @@ class Board {
 
   openCells(Board board, int posX, int posY, {BuildContext? ctx}) {
     if (cell.isEmpty(board, posX, posY)) {
-      board.backwardMoves.add([posX, posY]);
+      board.backwardMoves.push([posX, posY]);
       cell.openCells(posX, posY, board, ctx!);
     }
   }

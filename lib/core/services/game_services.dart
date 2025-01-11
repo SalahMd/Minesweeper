@@ -4,15 +4,15 @@ import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
 import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/core/helpers/shared_pref_helper.dart';
+import 'package:untitled/core/helpers/stack.dart';
 import 'package:untitled/features/home/data/board.dart';
 import 'package:untitled/features/home/data/cells.dart';
 
 class GameServices {
   SharedPrefHelper sharedPref = SharedPrefHelper();
 
-
   void saveBoard(Board board, BuildContext context) async {
-        int ctn;
+    int ctn;
     if (await sharedPref.getInt('numOfSavedBoards') == null) {
       ctn = 0;
       await sharedPref.setData('numOfSavedBoards', ctn);
@@ -26,10 +26,10 @@ class GameServices {
         'cells${ctn.toString()}', json.encode(board.cells));
     await sharedPref.setData(
         'mines${ctn.toString()}', json.encode(board.mines));
+    await sharedPref.setData('backwardMoves${ctn.toString()}',
+        json.encode(board.backwardMoves.stack));
     await sharedPref.setData(
-        'backwardMoves${ctn.toString()}', json.encode(board.backwardMoves));
-    await sharedPref.setData(
-        'forwardMoves${ctn.toString()}', json.encode(board.forwardMoves));
+        'forwardMoves${ctn.toString()}', json.encode(board.forwardMoves.stack));
     await sharedPref.setData(
         'openedCells${ctn.toString()}', json.encode(board.openedCells));
     await sharedPref.setData(
@@ -45,10 +45,10 @@ class GameServices {
         0,
         false,
         false,
-        json.decode(
-            await sharedPref.getString("backwardMoves${boardId.toString()}")!),
-        json.decode(
-            await sharedPref.getString("forwardMoves${boardId.toString()}")!),
+        MyStack.fillStack(json.decode(
+            await sharedPref.getString("backwardMoves${boardId.toString()}")!)),
+        MyStack.fillStack(json.decode(
+            await sharedPref.getString("forwardMoves${boardId.toString()}")!)),
         json.decode(await sharedPref.getString("cells${boardId.toString()}")!),
         json.decode(
             await sharedPref.getString("openedCells${boardId.toString()}")!),

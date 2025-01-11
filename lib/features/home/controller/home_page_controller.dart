@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:untitled/core/services/shared_pref.dart';
 import 'package:untitled/features/home/data/board.dart';
 import 'package:untitled/features/home/data/game.dart';
 

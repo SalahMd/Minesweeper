@@ -59,7 +59,7 @@ class Cells {
   void setFlag(Board board, int posX, int posY) {
     if (isEmpty(board, posX, posY) && board.cells[posX][posY] != 'f') {
       board.cells[posX][posY] = "f";
-      board.backwardMoves.add([posX, posY]);
+      board.backwardMoves.push([posX, posY]);
     }
   }
 
