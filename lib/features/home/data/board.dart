@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:untitled/core/constants/animations.dart';
@@ -7,7 +6,7 @@ import 'package:untitled/core/helpers/alerts.dart';
 import 'package:untitled/features/home/data/cells.dart';
 
 class Board {
-  int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
+  static int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
   List cells, openedCells, mines;
   int numOfOpenedCells;
   int id;
@@ -34,23 +33,20 @@ class Board {
 
   Board.generateBoard({
     required int numOfBoards,
-    required this.numOfRows,
-    required this.numOfColumns,
-    required this.numOfCells,
   })  : seconds = 0,
         isLost = false,
         isWin = false,
         backwardMoves = [],
         forwardMoves = [],
-        cells = generateList(null, numOfRows, numOfColumns),
-        openedCells = generateList([false, 0], numOfRows, numOfColumns),
-        mines = generateList(false, numOfRows, numOfColumns),
+        cells = generateList(null),
+        openedCells = generateList([false, 0]),
+        mines = generateList(false),
         numOfOpenedCells = 0,
         id = numOfBoards,
         flags = [],
         cell = Cells(numOfRows: numOfRows, numOfColumns: numOfColumns);
 
-  static List generateList(var val, int numOfRows, int numOfColumns) {
+  static List generateList(var val) {
     return List<List>.generate(
       numOfRows,
       (i) => List<dynamic>.generate(
@@ -60,59 +56,10 @@ class Board {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        'cells': cells,
-        'openedCells': openedCells,
-        'mines': mines,
-        'numOfOpenedCells': numOfOpenedCells,
-        'seconds': seconds,
-        'id': id,
-        'backwardMoves': backwardMoves,
-        'forwardMoves': forwardMoves,
-        'flags': flags,
-        'isWin': isWin,
-        'isLost': isLost,
-      };
-
-  static Board fromJson(
-    Map<String, dynamic> json,
-  ) {
-    return Board(
-      json['cells'],
-      json['openedCells'],
-      json['mines'],
-      json['numOfOpenedCells'],
-      json['seconds'],
-      json['id'],
-      json['backwardMoves'],
-      json['forwardMoves'],
-      json['flags'],
-      json['isWin'],
-      json['isLost'],
-      json['cell'],
-    );
-  }
-
   cleanBoard(Board board) {
-    board.mines = List<List>.generate(
-        numOfRows,
-        (i) => List<dynamic>.generate(
-              numOfColumns,
-              (index) => false,
-            ));
-    board.openedCells = List<List>.generate(
-        numOfRows,
-        (i) => List<dynamic>.generate(
-              numOfColumns,
-              (index) => [false, backwardMoves.length],
-            ));
-    board.cells = List<List>.generate(
-        numOfRows,
-        (i) => List<dynamic>.generate(
-              numOfColumns,
-              (index) => null,
-            ));
-
+    board.mines = generateList(false);
+    board.openedCells = generateList([false, backwardMoves.length]);
+    board.cells = generateList(null);
     board.seconds = 0;
     board.isWin = false;
     board.isLost = false;
@@ -121,9 +68,7 @@ class Board {
     board.forwardMoves = [];
   }
 
-  minesDistribution(
-    Board board,
-  ) {
+  minesDistribution(Board board) {
     Random random = Random();
     int ctn = numOfMines;
     while (ctn > 0) {
@@ -136,13 +81,13 @@ class Board {
     }
   }
 
-  bool checkLose(Board board, BuildContext ctx,
-      {int x = 0, int y = 0, bool isTimed = false}) {
-    if (board.mines[x][y] || isTimed) {
+  bool checkLose(Board board, BuildContext ctx, void Function() refresh,
+      {int? x, int? y, bool isTimed = false}) {
+    if (board.mines[x!][y!] || isTimed) {
       board.isLost = true;
       animationedAlert(AppAnimations.lose, 'You lost', () {
         replay(board);
-        Get.back();
+        refresh();
       }, ctx);
       return true;
     }

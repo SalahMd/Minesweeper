@@ -23,7 +23,7 @@ class Cells {
   void openCells(int x, int y, Board board, BuildContext ctx) {
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (validCell(i, j) &&
+        if (valid(i, j) &&
             !board.openedCells[i][j].first &&
             !board.mines[i][j]) {
           board.openedCells[i][j] = [true, board.backwardMoves.length];
@@ -44,7 +44,7 @@ class Cells {
     int ctn = 0;
     for (int i = x - 1; i <= x + 1; i++) {
       for (int j = y - 1; j <= y + 1; j++) {
-        if (validCell(i, j) && board.mines[i][j]) {
+        if (valid(i, j) && board.mines[i][j]) {
           ctn++;
         }
       }
@@ -52,7 +52,7 @@ class Cells {
     return ctn;
   }
 
-  bool validCell(int i, int j) {
+  bool valid(int i, int j) {
     return i >= 0 && j >= 0 && i < numOfRows && j < numOfColumns;
   }
 

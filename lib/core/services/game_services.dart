@@ -10,8 +10,9 @@ import 'package:untitled/features/home/data/cells.dart';
 class GameServices {
   SharedPrefHelper sharedPref = SharedPrefHelper();
 
-  void saveBoard(Board boards, BuildContext context) async {
-    int ctn;
+
+  void saveBoard(Board board, BuildContext context) async {
+        int ctn;
     if (await sharedPref.getInt('numOfSavedBoards') == null) {
       ctn = 0;
       await sharedPref.setData('numOfSavedBoards', ctn);
@@ -20,17 +21,17 @@ class GameServices {
     await sharedPref.setData('numOfSavedBoards', ctn);
     await sharedPref.setData('id${ctn.toString()}', ctn);
     await sharedPref.setData(
-        'numOfOpenedCells${ctn.toString()}', boards.numOfOpenedCells);
+        'numOfOpenedCells${ctn.toString()}', board.numOfOpenedCells);
     await sharedPref.setData(
-        'cells${ctn.toString()}', json.encode(boards.cells));
+        'cells${ctn.toString()}', json.encode(board.cells));
     await sharedPref.setData(
-        'mines${ctn.toString()}', json.encode(boards.mines));
+        'mines${ctn.toString()}', json.encode(board.mines));
     await sharedPref.setData(
-        'backwardMoves${ctn.toString()}', json.encode(boards.backwardMoves));
+        'backwardMoves${ctn.toString()}', json.encode(board.backwardMoves));
     await sharedPref.setData(
-        'forwardMoves${ctn.toString()}', json.encode(boards.forwardMoves));
+        'forwardMoves${ctn.toString()}', json.encode(board.forwardMoves));
     await sharedPref.setData(
-        'openedCells${ctn.toString()}', json.encode(boards.openedCells));
+        'openedCells${ctn.toString()}', json.encode(board.openedCells));
     await sharedPref.setData(
         'date${ctn.toString()}', DateTime.now().toString());
 
@@ -54,7 +55,8 @@ class GameServices {
         json.decode(await sharedPref.getString("mines${boardId.toString()}")!),
         await sharedPref.getInt("numOfOpenedCells${boardId.toString()}")!,
         await sharedPref.getInt("id${boardId.toString()}")!,
-        [],Cells(numOfRows: 9, numOfColumns: 8));
+        [],
+        Cells(numOfRows: 9, numOfColumns: 8));
     return board;
   }
 }

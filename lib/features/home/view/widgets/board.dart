@@ -23,7 +23,7 @@ class Board extends StatelessWidget {
         Grid(
           numOfCells: controller.numOfCells,
           controller: controller,
-          numOfColumns: controller.numOfColumns,
+          numOfColumns:controller.numOfColumns,
           boardNum: boardNum,
         ),
         SizedBox(
@@ -31,10 +31,10 @@ class Board extends StatelessWidget {
         ),
         Movements(
           onBackMove: () {
-            controller.backMove(controller.boards[boardNum]);
+            controller.backMove(controller.getBoard(boardNum));
           },
           onForwardMove: () {
-            controller.forwardMove(controller.boards[boardNum]);
+            controller.forwardMove(controller.getBoard(boardNum));
           },
           onSaveBoard: () {
             controller.saveBoard(boardNum);

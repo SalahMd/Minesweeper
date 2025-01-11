@@ -45,7 +45,7 @@ class Timer extends StatelessWidget {
                       color: AppColors.redColor,
                     )),
                 Text(
-                  controller.numOfMines.toString(),
+                  numOfMines.toString(),
                   style: TextStyles.w50018red(context),
                 ),
               ],
@@ -53,7 +53,7 @@ class Timer extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              controller.initBoard(true, board: controller.boards[numOfBoard]);
+              controller.initBoard(true, boardId: numOfBoard);
             },
             child: Container(
                 width: 60.w,
@@ -85,7 +85,7 @@ class Timer extends StatelessWidget {
                   color: AppColors.redColor,
                 ),
                 Text(
-                  controller.boards[numOfBoard].seconds.toString(),
+                  controller.getBoard(numOfBoard).seconds.toString(),
                   style: TextStyles.w50018red(context),
                 ),
               ],

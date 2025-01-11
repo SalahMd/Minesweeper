@@ -1,21 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:untitled/core/services/game_services.dart';
+import 'package:untitled/core/services/shared_pref.dart';
 import 'package:untitled/features/home/data/board.dart';
+import 'package:untitled/features/home/data/game.dart';
 
 class HomePageController extends GetxController {
-  int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
-  late Timer timer;
+  final int numOfMines = 10, numOfRows = 9, numOfColumns = 8, numOfCells = 72;
   final BuildContext context;
-  GameServices gameServices = GameServices();
-  List<Board> boards = [];
+  Game game = Game();
+  late Timer timer;
   HomePageController({required this.context});
 
   @override
   void onInit() async {
     if (await Get.arguments != null) {
-      boards.add(await Get.arguments);
+      game.addBoard(board: await Get.arguments);
       startTimer(await Get.arguments, false);
       update();
     } else {
@@ -24,18 +24,14 @@ class HomePageController extends GetxController {
     super.onInit();
   }
 
-  void initBoard(bool replay, {Board? board}) {
+  void initBoard(bool replay, {int? boardId}) {
     if (replay) {
-      boards.last.replay(board!);
-      startTimer(board, true);
+      game.replay(boardId!);
+      update();
+      startTimer(getBoard(boardId), true);
     } else {
-      boards.add(Board.generateBoard(
-          numOfBoards: boards.length + 1,
-          numOfRows: numOfRows,
-          numOfColumns: numOfColumns,
-          numOfCells: numOfCells));
-      boards.last.minesDistribution(boards.last);
-      startTimer(boards.last, false);
+      game.addBoard();
+      startTimer(game.boards.last, false);
     }
     update();
   }
@@ -64,7 +60,13 @@ class HomePageController extends GetxController {
   }
 
   bool checkLose(Board board, {int x = 0, int y = 0, bool isTimed = false}) {
-    return board.checkLose(board, context, x: x, y: y, isTimed: isTimed);
+    return board.checkLose(board, context, refreshBoard,
+        x: x, y: y, isTimed: isTimed);
+  }
+
+  void refreshBoard() {
+    Get.back();
+    update();
   }
 
   bool checkWin(Board board) {
@@ -81,11 +83,14 @@ class HomePageController extends GetxController {
   }
 
   void saveBoard(int boardId) {
-    gameServices.saveBoard(boards[boardId], context);
+    game.save(boardId, context);
   }
 
   void setFlag(Board board, int posX, int posY) {
     board.setFlag(board, posX, posY);
     update();
   }
+
+  Board getBoard(int boardId) => game.boards[boardId];
+  int getBoardsLenght() => game.boards.length;
 }

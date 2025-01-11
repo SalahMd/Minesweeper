@@ -39,7 +39,7 @@ class Grid extends StatelessWidget {
                     row: x,
                     col: y,
                     controller: controller,
-                    board: controller.boards[boardNum],
+                    board: controller.getBoard(boardNum),
                   );
                 }))
         .animate()
